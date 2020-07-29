@@ -1,6 +1,6 @@
 ### Task 1: Result Display CLI with tests.
 
-#### Create a CLI application to include user information and save it in file.
+#### 1. Create a CLI application to include user information and save it in file.
 
 Input should be through `argparse` rather than `input` or direct `sys.argv` parsing.
 I.e.
@@ -16,7 +16,7 @@ Each consecutive run should append the value if not present or replace when pres
 There should be percentage flag while storing which is (score/total)*100.
 
 
-#### Create a CLI application to display the user result stored above.
+#### 2. Create a CLI application to display the user result stored above.
 
 The second application will read from --store and display the information.
 
