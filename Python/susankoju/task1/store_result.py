@@ -41,7 +41,8 @@ def store_result(args):
                             pass
                     file_data =  ''.join(old_data).replace(row , ','.join(new_data))
     except Exception as e:
-        print(str(e))
+        #print(str(e))
+        pass
     if file_data:
         with open(args.store, 'w') as store:
             store.write(file_data)
@@ -72,4 +73,3 @@ if __name__ == '__main__':
     store_result(args)
 
     exit(0)
-
