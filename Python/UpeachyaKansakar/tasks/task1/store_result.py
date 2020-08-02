@@ -1,19 +1,22 @@
 import os
 import csv
 import argparse
+import datetime as dt
 
 POSSIBLE_SUBJECTS = ["english", "nepali", "mathematics", "science"]
 
-def isValidSubject (subject):
-    if subject and subject.lower() in POSSIBLE_SUBJECTS:
+def isValidDate (date):
+    try:
+        dt.datetime.strptime(date, '%Y/%m/%d')
         return True
-    return False
+    except ValueError: 
+        return False
 
 def getValidRecord(args):
-    if isValidSubject(args.subject):
+    if isValidDate(args.dob):
         return [args.name, args.dob, args.subject, args.score, args.total]
     else:
-        raise Exception(args.subject+" is not a valid subject")
+        raise Exception(args.dob+" is not a valid date. Please enter in yyyy/mm/dd format")
 
 def writeToFile(file, args, isFirstRecord):
     record_adder = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)

@@ -5,7 +5,10 @@ import operator
 import datetime as dt
 
 def calculatePercentage (score, total):
-    return (float(score)/int(total) * 100)
+    if score and total :
+        return (float(score)/int(total) * 100)
+    else:
+        return 0
 
 def displayRecords(fileName):
     with open (fileName,"r") as file:
