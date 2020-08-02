@@ -38,18 +38,40 @@ if __name__ == "__main__":
                     "subjects": [
                         {
                             "name": row['subject'],
-                            "total": row['total'],
-                            "score": row['score'],
-                            "percentage": row['percentage']
+                            "total": int(row['total']),
+                            "score": float(row['score']),
+                            "percentage": float(row['percentage'])
                         }
-                    ]
+                    ],
+                    "display_str": \
+f"\
+Name: {row['name']}\n\
+DOB: {datetime.datetime.strftime(datetime.datetime.strptime(row['dob'], '%d-%m-%Y'), '%B %d, %Y')}\n\
+{row['subject']}:\n\
+\tScore: {row['score']}\n\
+\tTotal: {row['total']}\n\
+\tPercentage: {row['percentage']}\n",
+                    "total_percentage": float(row['percentage'])
                 })
             else:
                 subjects_len = len(result_list[len_of_list - 1]['subjects'])
                 result_list[len_of_list-1]['subjects'].append({
                     "name": row['subject'],
-                    "total": row['total'],
-                    "score": row['score'],
-                    "percentage": row['percentage']
+                    "total": int(row['total']),
+                    "score": float(row['score']),
+                    "percentage": float(row['percentage'])
                 })
-        pprint.pprint(result_list)
+                result_list[len_of_list - 1]['total_percentage'] += float(row['percentage']) 
+                result_list[len_of_list - 1]['display_str'] \
++= f"\
+{row['subject']}:\n\
+\tScore: {row['score']}\n\
+\tTotal: {row['total']}\n\
+\tPercentage: {row['percentage']}\n"
+        # pprint.pprint(result_list)
+
+        for result in result_list:
+            print('***************************')
+            print(result['display_str'])
+            print(f"Total Percentage: {result['total_percentage'] / len(result['subjects'])}")
+            print('***************************')
