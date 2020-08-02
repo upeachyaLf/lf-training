@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import csv
-import pprint
 import argparse
 import datetime
 import pathlib
@@ -68,7 +67,6 @@ DOB: {datetime.datetime.strftime(datetime.datetime.strptime(row['dob'], '%d-%m-%
 \tScore: {row['score']}\n\
 \tTotal: {row['total']}\n\
 \tPercentage: {row['percentage']}\n"
-        # pprint.pprint(result_list)
 
         for result in result_list:
             print('***************************')
