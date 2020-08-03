@@ -1,9 +1,10 @@
-import os, json
+import json
 import argparse
+from pathlib import Path
 
 #load json contents into an object
 def get_result(filename):
-    if os.path.exists(filename) and os.path.isfile(filename):
+    if Path.is_file(Path(Path.cwd(),filename)):
         with open(filename, 'r') as results:
             data = json.load(results)
             print_result(data)

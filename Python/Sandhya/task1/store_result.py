@@ -1,7 +1,7 @@
-import os
 import argparse
 from datetime import datetime
 import json
+from pathlib import Path
 
 #Validate if entered date is valid or not
 #Then return date in string format
@@ -65,7 +65,7 @@ newdict = {
 sub_values = values['subject']
 
 #If the file already exists then append to the existing file
-if os.path.exists(filename) and os.path.isfile(filename):
+if Path.is_file(Path(Path.cwd(),filename)):
     with open(filename, 'r') as file1:
         file_content = json.load(file1)
 
