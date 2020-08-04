@@ -61,35 +61,34 @@ def add_subcommand_store_data(group):
         "--store", required=True, help="Output User Info"
     )
 
-def isDuplicateRecord(f, args):
+def get_current_file_contents(f, args):
+    data_lists = []
     with open(f, mode='r') as reader:
-        csv_reader = csv.DictReader(reader)
+        csv_reader = csv.reader(reader)
         for row in csv_reader:
-            if row["name"] == args.name and row["subject"] == args.subject:
-                return True
-        return False
+            data_lists.append(row)
+            if row[0] == args.name and row[2] == args.subject:
+                data_lists.remove(row)
+        return data_lists
 
-def write_to_file(file, args):
-    try:
-        thewriter = csv.writer(file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        thewriter.writerow([args.name, args.dob, args.subject, args.score, args.totalscore,  str(calc_percent(args.totalscore,args.score)) + '%'])
-    except IOError:
-        raise Exception('Error while writing to the file') 
+def write_to_file(filepath, writelines):
+    with open(filepath, mode='w') as writefile:
+        try:
+            writer = csv.writer(writefile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+            writer.writerows(writelines)
+        except IOError:
+            raise Exception('Error while writing to the file') 
 
-def addheader(file, headers):
-    with open(file, mode='w') as f:
-        thewriter = csv.writer(f, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        thewriter.writerow(headers)
+def addheader(filepath, writeline):
+    with open(filepath, mode='w') as writefile:
+        writer = csv.writer(writefile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+        writer.writerow(writeline)
     return 
 
-def store_user_info(file, args):
-    if isDuplicateRecord(args.store, args):
-        print('Duplicate Record Found')
-        return 
-    else:
-        write_to_file(file, args)
-        return
-
+def store_user_info(filepath, args):
+    content = get_current_file_contents(filepath, args)
+    content.append([args.name, args.dob, args.subject, args.score, args.totalscore,  str(calc_percent(args.totalscore,args.score)) + '%'])
+    write_to_file(filepath, content)
         
 def main(args=None):
     parser = argparse.ArgumentParser(prog='user_info', description='CLI to store User Info')
@@ -104,8 +103,7 @@ def main(args=None):
 
     if not os.path.exists(filename):
         addheader(filename, HEADERS)
-    file=open(filename,"a")
-    store_user_info(file, args)
+    store_user_info(filename, args)
 
     return 
 main()
