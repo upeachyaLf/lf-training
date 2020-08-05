@@ -1,5 +1,5 @@
 import argparse
-from datetime import datetime
+from datetime import date
 import csv
 import os
 
@@ -9,7 +9,7 @@ HEADERS = ["name", "dob", "subject","score", "total", "percentage"]
 
 def date_validation(s):
     try:
-        return datetime.strptime(s, "%Y-%m-%d")
+        return date.fromisoformat(s)
     except ValueError:
         error_msg = f"Not a valid date: {s}"
         raise argparse.ArgumentTypeError(error_msg) 
@@ -18,7 +18,7 @@ def calc_percent(total, score):
     try:
         return score/total*100 
     except ZeroDivisionError:
-        raise Exception('division by zero')
+        raise ZeroDivisionError('division by zero')
 
 def numeric_type(num):
     try:
@@ -29,11 +29,8 @@ def numeric_type(num):
 
 def validate_choice(sub):
     try:
-        subject = sub.strip().capitalize()
-        if subject in SUBJECT_CHOICES:
-            return subject
-        raise argparse.ArgumentError(f'Invalid Choice: {sub} (choose from {tuple(SUBJECT_CHOICES)})')
-    except ValueError:
+        return sub.strip().capitalize()
+    except AttributeError:
         raise argparse.ArgumentTypeError('Not a valid Type')
 
 def add_subcommand_get_user_info(group):
@@ -41,24 +38,24 @@ def add_subcommand_get_user_info(group):
         '-n' , "--name", help="Name", required=True
     )
     group.add_argument(
-        '--dob', "--dateofbirth", help="Date Of Birth - format YYYY-MM-DD", 
-                    required=True, 
+        '--dob', help="Date Of Birth - format YYYY-MM-DD", 
+                    
                     type=date_validation
     )
     group.add_argument(
-        '-sub', '--subject', choices=['English', 'Nepali', 'Mathematics'], required=True, type=validate_choice
+        '-sub', '--subject', choices=['English', 'Nepali', 'Mathematics'], type=validate_choice, default='English'
     )
     group.add_argument(
-        '--score', type=numeric_type, required=True
+        '--score', type=numeric_type, default=40
     )
     group.add_argument(
-        '-total', '--totalscore', type=int, required=True
+        '-total', '--totalscore', type=int, default=100
     )
 
 def add_subcommand_store_data(group):
     group.add_argument(
         # "--store", type=argparse.FileType('w', encoding='UTF-8'), help="Output User Info", required=True
-        "--store", required=True, help="Output User Info"
+        "--store", help="Output User Info", default='user_info.csv'
     )
 
 def get_current_file_contents(f, args):
@@ -85,25 +82,32 @@ def addheader(filepath, writeline):
         writer.writerow(writeline)
     return 
 
-def store_user_info(filepath, args):
-    content = get_current_file_contents(filepath, args)
-    content.append([args.name, args.dob, args.subject, args.score, args.totalscore,  str(calc_percent(args.totalscore,args.score)) + '%'])
-    write_to_file(filepath, content)
-        
-def main(args=None):
+def make_list(args):
+    return [args.name, args.dob, args.subject, args.score, args.totalscore, str(calc_percent(args.totalscore,args.score)) + '%']
+
+def append_contents(content, args):
+    content.append([*args])
+    return content
+
+def get_args(args=None):
     parser = argparse.ArgumentParser(prog='user_info', description='CLI to store User Info')
     user_information = parser.add_argument_group('user_info')
     store_info = parser.add_argument_group('store_info')
     add_subcommand_get_user_info(user_information)
     add_subcommand_store_data(store_info)
 
-    args = parser.parse_args(args)
-    filename = args.store
-    # writer = csv.writer(args.store)
+    return parser.parse_args(args)
 
+def main(args=None):
+    args = get_args(args)
+    return args
+
+if __name__ == "__main__":
+    args = main()
+    filename = args.store
     if not os.path.exists(filename):
         addheader(filename, HEADERS)
-    store_user_info(filename, args)
-
-    return 
-main()
+    args_list = make_list(args)
+    current_content = get_current_file_contents(filename, args)
+    new_content = append_contents(current_content, args_list)
+    write_to_file(filename,new_content)

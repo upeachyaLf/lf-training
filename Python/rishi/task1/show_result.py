@@ -1,18 +1,20 @@
 import argparse
 import csv
 import os
+from datetime import datetime
 
 def display_records(headers, records):
     result = ''
     for row in records:
         result += f"Name: {row[0]}".format() + "\n"
-        result += f"Date of Birth: {row[1].split(' ')[0]}\n" 
+        result += f"Date of Birth: {row[1]}\n" 
         result += f"{row[2]}:\n"
         result += f"\tScore: {row[3]}\n"
         result += f"\tTotal: {row[4]}\n"
         result += f"Percentage: {row[5]}\n"
         result += "-----------------"+ "\n\n"
     print(result)
+
 def read_records(filename):
     try:
         records = {}
@@ -20,11 +22,9 @@ def read_records(filename):
         with open(filename, mode='r') as f:
             readers = csv.reader(f)
             headers = next(readers)
-            # map_row_to_headers = {header: '' for header in headers} 
-            # print(map_row_to_headers)
             for row in readers:
                 lists.append(row)
-            return display_records(headers, lists)
+            return (headers, lists)
     except FileNotFoundError:
         raise Exception('csv format file only')
 
@@ -37,8 +37,12 @@ def main(args=None):
     filename = args.store
 
     if not os.path.exists(filename):
-        print("Please Enter Records First")
+        raise FileNotFoundError("Please Enter Records First")
     
-    read_records(filename)
+    return filename
 
-main()
+if __name__ == "__main__":
+    filename = main()
+    get_records = read_records(filename)
+    display_records(get_records[0], get_records[1])
+    
