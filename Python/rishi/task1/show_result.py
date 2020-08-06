@@ -25,24 +25,23 @@ def read_records(filename):
             for row in readers:
                 lists.append(row)
             return (headers, lists)
-    except FileNotFoundError:
-        raise Exception('csv format file only')
+    except IOError:
+        raise
 
-def main(args=None):
+def get_args(args=None):
     parser = argparse.ArgumentParser(prog='Show User Info', description='CLI to Show User Info')
     user_information = parser.add_argument( 
-        "--store", required=True, help="Output User Info")
+        "--store", required=True, help="File Name")
+    return parser.parse_args(args)
 
-    args = parser.parse_args(args)
-    filename = args.store
-
-    if not os.path.exists(filename):
-        raise FileNotFoundError("Please Enter Records First")
-    
-    return filename
+def main(args=None):
+    args = get_args()
+    return args.store
 
 if __name__ == "__main__":
     filename = main()
+    if not os.path.exists(filename):
+        raise FileNotFoundError("Create Record!")
     get_records = read_records(filename)
     display_records(get_records[0], get_records[1])
     

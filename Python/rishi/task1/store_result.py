@@ -2,6 +2,7 @@ import argparse
 from datetime import date
 import csv
 import os
+import sys
 
 SUBJECT_CHOICES = ['English', 'Nepali', 'Mathematics']
 HEADERS = ["name", "dob", "subject","score", "total", "percentage"]
@@ -17,8 +18,8 @@ def date_validation(s):
 def calc_percent(total, score):
     try:
         return score/total*100 
-    except ZeroDivisionError:
-        raise ZeroDivisionError('division by zero')
+    except ZeroDivisionError as error:
+        raise
 
 def numeric_type(num):
     try:
@@ -73,21 +74,18 @@ def write_to_file(filepath, writelines):
         try:
             writer = csv.writer(writefile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             writer.writerows(writelines)
-        except IOError:
-            raise Exception('Error while writing to the file') 
+        except IOError as error:
+            errno, strerror = error.args 
+            print(f'IoError{errno}: {strerror}')
+            raise
 
 def addheader(filepath, writeline):
     with open(filepath, mode='w') as writefile:
         writer = csv.writer(writefile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(writeline)
-    return 
 
 def make_list(args):
     return [args.name, args.dob, args.subject, args.score, args.totalscore, str(calc_percent(args.totalscore,args.score)) + '%']
-
-def append_contents(content, args):
-    content.append([*args])
-    return content
 
 def get_args(args=None):
     parser = argparse.ArgumentParser(prog='user_info', description='CLI to store User Info')
@@ -108,6 +106,6 @@ if __name__ == "__main__":
     if not os.path.exists(filename):
         addheader(filename, HEADERS)
     args_list = make_list(args)
-    current_content = get_current_file_contents(filename, args)
-    new_content = append_contents(current_content, args_list)
-    write_to_file(filename,new_content)
+    content = get_current_file_contents(filename, args)
+    content.append(args_list)
+    write_to_file(filename,content)

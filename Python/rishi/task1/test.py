@@ -4,11 +4,10 @@ import sys
 
 from datetime import date
 from unittest import mock
-# from mock import MagicMock
 from io import StringIO
 from types import SimpleNamespace
 
-from store_result import validate_choice, numeric_type, calc_percent, date_validation, write_to_file, get_args, append_contents, make_list
+from store_result import validate_choice, numeric_type, calc_percent, date_validation, write_to_file, get_args,make_list
 from show_result import read_records
 
 def test_validate_choice():
@@ -47,29 +46,3 @@ def test_make_list():
     args = SimpleNamespace(**_dict)
     list_ = make_list(args)
     assert list_ == ['rishi', date.fromisoformat('2020-08-05'), 'English', 80, 100, '80.0%']
-
-def test_append_content():
-    get_content = append_contents([['a', 'b'], ['c', 'd']], ['rishi'])
-    assert get_content == [['a', 'b'], ['c', 'd'], ['rishi']]
-
-# def test_parser():
-#     sys.argv = ["sys",'--name', 'rishi', '--dob', '2019-01-01', '-sub', 'English', '--score', 70, '-total', 100, '--store', 'za.csv']
-
-#     parser = get_args(sys.argv)
-    # assert parser.name == 'rishi'
-
-# def test_write_to_file():
-#     handle = MagicMock()
-#     m = mock.mock_open()
-#     with mock.patch('__main__.open', m, create=True):
-#         write_to_file('aa.csv', [['rishi', '2019-01-01', 'Maths', 69, 100], ['Rishi', '2019-01-01', 'English', 89, 100]])
-#     m.mock_calls
-#     # m.assert_called_once_with('aa.csv', 'w')
-#     # assert 
-
-# def test_read_records():
-#     read = StringIO()
-#     with mock.patch('__main__.open', m, create=True):
-#         with open('aa.csv') as f:
-#             result = f.read()
-#         assert result == 'A B C'
