@@ -4,13 +4,13 @@ import argparse
 import operator
 import datetime as dt
 
-def calculatePercentage (score, total):
+def calculate_percentage (score, total):
     if score and total :
         return (float(score)/int(total) * 100)
     else:
         return 0
 
-def displayRecords(fileName):
+def display_records(fileName):
     with open (fileName,"r") as file:
         csv_reader = csv.DictReader(file)
         records = ''
@@ -21,26 +21,28 @@ def displayRecords(fileName):
             records += row["subject"] + ":\n"
             records += "\t"+"Score: {}".format(row["score"]) + "\n"
             records += "\t"+"Total: {}]".format(row["total"]) + "\n"
-            records += "Percentage: {}".format(calculatePercentage(row["score"],row["total"])) + "\n"
+            records += "Percentage: {}".format(calculate_percentage(row["score"],row["total"])) + "\n"
             records += "-----------------"+ "\n\n"
-        file.close()
         return records
 
-def storeResult(result):
+def store_result(result):
     with open ("result.txt", "w") as resultFile:
         resultFile.write(result)
-        resultFile.close()
 
-parser = argparse.ArgumentParser()
-parser.add_argument("-s","--store", help="Enter filename to read its content")
+def main ():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-s","--store", help="Enter filename to read its content")
 
-args = parser.parse_args()
+    args = parser.parse_args()
 
-store = args.store
-if not store:
-    print("Please enter a file name!")
-elif os.path.exists(store):
-    print(displayRecords(store));  
-    storeResult(displayRecords(store))
-else:
-    print("File with name %s not found" %(store))
+    store = args.store
+    if not store:
+        print("Please enter a file name!")
+    elif os.path.exists(store):
+        print(display_records(store));  
+        store_result(display_records(store))
+    else:
+        print("File with name %s not found" %(store))
+
+if __name__=="__main__":
+    main()

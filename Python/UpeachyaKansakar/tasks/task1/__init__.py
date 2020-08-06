@@ -1,1 +1,1 @@
-from .show_result import calculatePercentage
+from .show_result import calculate_percentage
