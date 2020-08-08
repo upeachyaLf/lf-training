@@ -5,15 +5,18 @@ import argparse
 import datetime
 import pathlib
 
-USAGE_EXAMPLE = "Usage example:\n python3 store_result.py --name John Doe --dob 01-11-2001 --subject Nepali --total 100 --score 65.25 --store store.csv"
-NAME_HELP = "Name of student: 'FIRST MIDDLE(optional) LAST'"
-DOB_HELP = "Student's Date of Birth in DD-MM-YYYY format."
-SUBJECT_HELP = "Value should be from the set."
-TOTAL_HELP = "Total/full marks for the subject."
-SCORE_HELP = "Score of the selected subject. Value should be a floating point number and can not be greater than full/total marks of the subject or less than 0."
-STORE_HELP = "File name to store the result. e.g. store.csv"
+from text_constants import (
+    STORE_RESULT_USAGE_EXAMPLE, 
+    STORE_RESULT_NAME_HELP, 
+    STORE_RESULT_DOB_HELP, 
+    STORE_RESULT_SUBJECT_HELP, 
+    STORE_RESULT_TOTAL_HELP, 
+    STORE_RESULT_SCORE_HELP, 
+    STORE_RESULT_STORE_HELP
+)
 
 FIELD_NAMES = ['name', 'dob', 'subject', 'total', 'score', 'percentage']
+SUBJECT_CHOICES = ['Nepali', 'English', 'Math', 'Science', 'Social']
 
 def validate_date(date_string):
     try:
@@ -55,32 +58,30 @@ def get_percentage(result):
     
     return round(percentage, 2)
 
-parser = argparse.ArgumentParser(description=USAGE_EXAMPLE,
+parser = argparse.ArgumentParser(description=STORE_RESULT_USAGE_EXAMPLE,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("--name",
-                    help=NAME_HELP,
+                    help=STORE_RESULT_NAME_HELP,
                     required=True)
 parser.add_argument("--dob", type=validate_date,
-                    help=DOB_HELP,
+                    help=STORE_RESULT_DOB_HELP,
                     required=True)
 parser.add_argument("--subject",
-                    choices=['Nepali', 'English', 'Math', 'Science', 'Social'],
-                    help=SUBJECT_HELP,
+                    choices=SUBJECT_CHOICES,
+                    help=STORE_RESULT_SUBJECT_HELP,
                     required=True)
 parser.add_argument("--total", type=int,
-                    help=TOTAL_HELP,
+                    help=STORE_RESULT_TOTAL_HELP,
                     required=True)
 parser.add_argument("--score", type=float,
-                    help=SCORE_HELP,
+                    help=STORE_RESULT_SCORE_HELP,
                     required=True)
 parser.add_argument("--store",
-                    help=STORE_HELP,
+                    help=STORE_RESULT_STORE_HELP,
                     required=True)
 
 
-if __name__ == "__main__":
-    opts = parser.parse_args()
-    result_dict = opts.__dict__
+def main(result_dict):
     file_name = result_dict.pop('store')
 
     validate_score(result_dict)
@@ -91,7 +92,12 @@ if __name__ == "__main__":
     if not pathlib.Path(file_name).exists():
         create_new_file(file_name)
         write_new_record(file_name, result_dict)
-        exit()
+        return
 
     check_for_duplicate_record(file_name, result_dict)
     write_new_record(file_name, result_dict)
+
+if __name__ == "__main__":
+    opts = parser.parse_args()
+
+    main(opts.__dict__)

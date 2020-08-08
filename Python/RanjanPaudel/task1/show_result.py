@@ -5,15 +5,15 @@ import argparse
 import datetime
 import pathlib
 
-USAGE_EXAMPLE = "Usage example:\n python3 store_result.py --store store.csv"
-STORE_HELP = "File name to retrieve the results. e.g. store.csv"
+from text_constants import (
+    SHOW_RESULT_USAGE_EXAMPLE,
+    SHOW_RESULT_STORE_HELP
+)
 
-FIELD_NAMES = ['name', 'dob', 'subject', 'total', 'score', 'percentage']
-
-parser = argparse.ArgumentParser(description=USAGE_EXAMPLE,
+parser = argparse.ArgumentParser(description=SHOW_RESULT_USAGE_EXAMPLE,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
 parser.add_argument("--store",
-                    help=STORE_HELP,
+                    help=SHOW_RESULT_STORE_HELP,
                     required=True)
 
 def get_avg_percentage(total, subject_count):
@@ -22,7 +22,7 @@ def get_avg_percentage(total, subject_count):
     return round(percentage, 2)
 
 def get_formatted_date(date_str):
-    date_object = datetime.datetime.strptime(date_str, '%d-%m-%Y')
+    date_object = datetime.datetime.strptime(date_str, '%Y-%m-%d')
     
     return datetime.datetime.strftime(date_object, '%B %d, %Y')
 
@@ -53,10 +53,7 @@ def get_display_string(result, is_initital):
 
     return _str
 
-if __name__ == "__main__":
-    opts = parser.parse_args()
-    arg_dict = opts.__dict__
-
+def main(arg_dict):
     check_file_existance(arg_dict['store'])
 
     sorted_result = get_records(arg_dict['store'])
@@ -87,3 +84,8 @@ if __name__ == "__main__":
             result_list[len_of_list - 1]['display_str'] += get_display_string(row, False)
 
     display_resluts(result_list)
+
+if __name__ == "__main__":
+    opts = parser.parse_args()
+
+    main(opts.__dict__)
