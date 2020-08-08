@@ -1,4 +1,5 @@
 ''' Task 1 CLI application to show information saved in file. '''
+import os
 import argparse
 import datetime
 
@@ -7,6 +8,9 @@ index = {'name': 0, 'dob': 1, 'English': 2, 'Nepali': 4, 'optional': 6, 'optiona
 
 def show_result(filename):
     ''' Show result form file '''
+    if not os.path.isfile(filename):
+        print('File doesn\'t exist! Please enter valid stored filename... (Use --help for help)')
+        exit(1)
     with open(filename, 'r') as store:
         data = store.readlines()
         for result in data:
