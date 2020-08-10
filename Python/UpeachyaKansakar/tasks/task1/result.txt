@@ -1,0 +1,16 @@
+Name: Jane_Doe
+Date of birth: 2020-01-01 00:00:00
+english:
+	Score: 45.5
+	Total: 100]
+Percentage: 45.5
+-----------------
+
+Name: Jenny
+Date of birth: 2020-01-01 00:00:00
+nepali:
+	Score: 95.5
+	Total: 100]
+Percentage: 95.5
+-----------------
+
