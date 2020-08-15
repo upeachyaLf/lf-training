@@ -1,7 +1,7 @@
 import time
-from pandas import DataFrame 
 import requests
 import urllib.request
+from pandas import DataFrame 
 from bs4 import BeautifulSoup
 
 URL = 'https://www.opencodez.com/category/web-development'
