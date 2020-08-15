@@ -109,12 +109,12 @@ top_rated_movies:
   title: Sen to Chihiro no kamikakushi
 - imdb_rating: '8.5'
   rank: '28'
-  release_year: '2020'
-  title: Hamilton
-- imdb_rating: '8.5'
-  rank: '29'
   release_year: '1999'
   title: The Green Mile
+- imdb_rating: '8.5'
+  rank: '29'
+  release_year: '2020'
+  title: Hamilton
 - imdb_rating: '8.5'
   rank: '30'
   release_year: '2019'
