@@ -1,13 +1,15 @@
 import sqlite3
 
-top_rated_db = 'sqlite_dbs/top_rated_movies.db'
+top_rated_db = 'sqlite_dbs/imdb_movies.db'
 
 table_all_columns = {
-    "top_rated_movies": "(rank, title, release_year, imdb_rating)"
+    "top_rated_movies": "(rank, title, release_year, imdb_rating)",
+    "most_popular_movies": "(title, release_year, imdb_rating, position, pre_position, popularity)"
 }
 
 table_all_column_binds = {
-    "top_rated_movies": "(?, ?, ?, ?)"
+    "top_rated_movies": "(?, ?, ?, ?)",
+    "most_popular_movies": "(?, ?, ?, ?, ?, ?)"
 }
 
 

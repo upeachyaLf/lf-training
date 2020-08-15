@@ -329,12 +329,12 @@ top_rated_movies:
   title: Tengoku to jigoku
 - imdb_rating: '8.3'
   rank: '83'
-  release_year: '1984'
-  title: Amadeus
-- imdb_rating: '8.3'
-  rank: '84'
   release_year: '2007'
   title: Taare Zameen Par
+- imdb_rating: '8.3'
+  rank: '84'
+  release_year: '1984'
+  title: Amadeus
 - imdb_rating: '8.3'
   rank: '85'
   release_year: '1983'
@@ -705,12 +705,12 @@ top_rated_movies:
   title: Fargo
 - imdb_rating: '8.1'
   rank: '177'
-  release_year: '1953'
-  title: "T\xF4ky\xF4 monogatari"
-- imdb_rating: '8.1'
-  rank: '178'
   release_year: '1949'
   title: The Third Man
+- imdb_rating: '8.1'
+  rank: '178'
+  release_year: '1953'
+  title: "T\xF4ky\xF4 monogatari"
 - imdb_rating: '8.1'
   rank: '179'
   release_year: '1954'
