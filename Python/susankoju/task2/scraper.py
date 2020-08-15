@@ -35,6 +35,7 @@ def get_search_result_rows(data, max=DEFAULT_MAX):
 
     return rows
 
+
 def store_data_in_db(json_data, header, filename=DEFAULT_FILENAME):
     ''' Store data in DB '''
     print('\nStoring data in SQLite database...')
