@@ -1,6 +1,6 @@
-import time
 import requests
 import urllib.request
+import time
 from bs4 import BeautifulSoup
 
 def scrapPagetitle(soupObject):
@@ -10,19 +10,30 @@ def scrapPagetitle(soupObject):
         titles.append(title.get_text())   
     return titles  
 
+def getTotalPages(soupObject):
+    pagination_div = soupObject.find('div',{'class':'pagination'})
+    return len(pagination_div.findAll('li'))
 
 def main():
-    # set the url to the website and access the site with our requests library
+    all_titles = []
     url = 'https://www.opencodez.com/category/web-development'
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser') 
-
-    # For finding total number of pages
-    pagination_div = soup.find('div',{'class':'pagination'})
-    total_pages = len(pagination_div.findAll('li'))
     all_titles = scrapPagetitle(soup)
-    time.sleep(5)
-    print("all titles",all_titles)
+    time.sleep(3)
+    # NOTE: looping to scrape all pages
+    total_pages = getTotalPages(soup)
+    # NOTE: page 0 is already fetched so starting from 1
+    for pageNumber in range(1, total_pages-1):
+        url_with_pagination = url + '/page/' + str(pageNumber)
+        response = requests.get(url_with_pagination)
+        soup = BeautifulSoup(response.text, 'html.parser') 
+        all_titles = all_titles + scrapPagetitle(soup)
+        time.sleep(3)
+
+    
+    import pdb
+    pdb.set_trace()
 
 
 if __name__ == "__main__":
