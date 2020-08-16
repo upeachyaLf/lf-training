@@ -1,7 +1,6 @@
 import re
 import time
 import requests
-import pdb
 from bs4 import BeautifulSoup
 
 import file_handler as fh
