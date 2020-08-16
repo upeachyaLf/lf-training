@@ -293,7 +293,7 @@ most_popular_movies:
   pre_position: '2720'
   release_year: '1985'
   title: Cocoon
-- imdb_rating: '6.2'
+- imdb_rating: '6.3'
   popularity: DECREASED
   position: '50'
   pre_position: '21'
@@ -389,7 +389,7 @@ most_popular_movies:
   pre_position: '38'
   release_year: '2008'
   title: Twilight
-- imdb_rating: '5.2'
+- imdb_rating: '5.3'
   popularity: INCREASED
   position: '66'
   pre_position: '320'

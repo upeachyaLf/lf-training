@@ -637,12 +637,12 @@ top_rated_tv_shows:
   title: "Le Bureau des L\xE9gendes"
 - imdb_rating: '8.5'
   rank: '160'
-  release_year: '2010'
-  title: "Behzat \xC7.: Bir Ankara Polisiyesi"
-- imdb_rating: '8.5'
-  rank: '161'
   release_year: '2012'
   title: The Newsroom
+- imdb_rating: '8.5'
+  rank: '161'
+  release_year: '2010'
+  title: "Behzat \xC7.: Bir Ankara Polisiyesi"
 - imdb_rating: '8.5'
   rank: '162'
   release_year: '1999'
@@ -733,12 +733,12 @@ top_rated_tv_shows:
   title: The Great British Bake Off
 - imdb_rating: '8.5'
   rank: '184'
-  release_year: '2017'
-  title: Twin Peaks
-- imdb_rating: '8.5'
-  rank: '185'
   release_year: '2005'
   title: Doctor Who
+- imdb_rating: '8.5'
+  rank: '185'
+  release_year: '2017'
+  title: Twin Peaks
 - imdb_rating: '8.5'
   rank: '186'
   release_year: '2007'
@@ -813,16 +813,16 @@ top_rated_tv_shows:
   title: Louie
 - imdb_rating: '8.5'
   rank: '204'
+  release_year: '2016'
+  title: Letterkenny
+- imdb_rating: '8.5'
+  rank: '205'
   release_year: '2015'
   title: Mr. Robot
 - imdb_rating: '8.5'
-  rank: '205'
+  rank: '206'
   release_year: '1999'
   title: GTO
-- imdb_rating: '8.5'
-  rank: '206'
-  release_year: '2016'
-  title: Letterkenny
 - imdb_rating: '8.5'
   rank: '207'
   release_year: '2012'
@@ -882,11 +882,11 @@ top_rated_tv_shows:
 - imdb_rating: '8.5'
   rank: '221'
   release_year: '2008'
-  title: John Adams
+  title: Sons of Anarchy
 - imdb_rating: '8.5'
   rank: '222'
   release_year: '2008'
-  title: Sons of Anarchy
+  title: John Adams
 - imdb_rating: '8.5'
   rank: '223'
   release_year: '2016'
@@ -965,20 +965,20 @@ top_rated_tv_shows:
   title: Delhi Crime
 - imdb_rating: '8.4'
   rank: '242'
+  release_year: '2016'
+  title: "Boku no h\xEEr\xF4 akademia"
+- imdb_rating: '8.4'
+  rank: '243'
   release_year: '2014'
   title: The Knick
 - imdb_rating: '8.4'
-  rank: '243'
+  rank: '244'
   release_year: '2001'
   title: Samurai Jack
 - imdb_rating: '8.4'
-  rank: '244'
+  rank: '245'
   release_year: '2010'
   title: Luther
-- imdb_rating: '8.4'
-  rank: '245'
-  release_year: '2016'
-  title: "Boku no h\xEEr\xF4 akademia"
 - imdb_rating: '8.4'
   rank: '246'
   release_year: '2002'

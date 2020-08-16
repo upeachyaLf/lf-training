@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 
 import file_handler as fh
 import sqlite_handler as sh
+import mongo_handler as mh
 
 imdb_base_url = "https://www.imdb.com"
 search_map = {
@@ -118,6 +119,17 @@ def read_from_sqlite(table_name):
         print(row)
 
 
+def store_in_mongo_db(table_name, data_list):
+    mh.insert_many(table_name, data_list)
+
+
+def read_from_mongo_db(collection_name):
+    data = mh.fetch_all(table_name)
+
+    for document in data:
+        print(document)
+
+
 def request_and_get_soup(url):
     response_content = ''
 
@@ -138,7 +150,11 @@ def scrape_data(_type):
     print('*** Storing in SQLite DB...')
     store_in_sqlite(table_map[_type], movie_list)
     print('*** Done.')
+    print('*** Storing in MongoDB...')
+    store_in_mongo_db(table_map[_type], movie_list)
+    print('*** Done.')
     # read_from_sqlite(table_map[_type])
+    # read_from_mongo_db(table_map[_type])
 
 
 def main():

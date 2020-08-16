@@ -109,12 +109,12 @@ top_rated_movies:
   title: Sen to Chihiro no kamikakushi
 - imdb_rating: '8.5'
   rank: '28'
-  release_year: '1999'
-  title: The Green Mile
-- imdb_rating: '8.5'
-  rank: '29'
   release_year: '2020'
   title: Hamilton
+- imdb_rating: '8.5'
+  rank: '29'
+  release_year: '1999'
+  title: The Green Mile
 - imdb_rating: '8.5'
   rank: '30'
   release_year: '2019'
@@ -373,12 +373,12 @@ top_rated_movies:
   title: "M - Eine Stadt sucht einen M\xF6rder"
 - imdb_rating: '8.3'
   rank: '94'
-  release_year: '2016'
-  title: Dangal
-- imdb_rating: '8.3'
-  rank: '95'
   release_year: '2019'
   title: '1917'
+- imdb_rating: '8.3'
+  rank: '95'
+  release_year: '2016'
+  title: Dangal
 - imdb_rating: '8.3'
   rank: '96'
   release_year: '2004'
@@ -593,12 +593,12 @@ top_rated_movies:
   title: There Will Be Blood
 - imdb_rating: '8.1'
   rank: '149'
-  release_year: '1948'
-  title: The Treasure of the Sierra Madre
-- imdb_rating: '8.1'
-  rank: '150'
   release_year: '1961'
   title: Judgment at Nuremberg
+- imdb_rating: '8.1'
+  rank: '150'
+  release_year: '1948'
+  title: The Treasure of the Sierra Madre
 - imdb_rating: '8.1'
   rank: '151'
   release_year: '2017'
@@ -941,12 +941,12 @@ top_rated_movies:
   title: Portrait de la jeune fille en feu
 - imdb_rating: '8.0'
   rank: '236'
-  release_year: '1928'
-  title: The Circus
-- imdb_rating: '8.0'
-  rank: '237'
   release_year: '2004'
   title: Before Sunset
+- imdb_rating: '8.0'
+  rank: '237'
+  release_year: '1928'
+  title: The Circus
 - imdb_rating: '8.0'
   rank: '238'
   release_year: '1934'
@@ -997,5 +997,5 @@ top_rated_movies:
   title: Hera Pheri
 - imdb_rating: '8.0'
   rank: '250'
-  release_year: '1997'
-  title: "Shin seiki Evangelion Gekij\xF4-ban: Air/Magokoro wo, kimi ni"
+  release_year: '2001'
+  title: 'Lagaan: Once Upon a Time in India'
