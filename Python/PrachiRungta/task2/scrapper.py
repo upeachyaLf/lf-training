@@ -19,9 +19,10 @@ def create_output_folder():
  
 #scrape books stock from books.toscrape.com
 books_stock=[]
-
-for x in range(1,2):
+#scrape for range 10 pages
+for x in range(1,11):
     url= 'http://books.toscrape.com/catalogue/page-'
+    #pass page number in request
     request = requests.get(url+str(x)+'.html')
     print(request)
     soup= BeautifulSoup(request.content,'html.parser')
