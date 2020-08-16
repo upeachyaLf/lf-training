@@ -329,12 +329,12 @@ top_rated_movies:
   title: Tengoku to jigoku
 - imdb_rating: '8.3'
   rank: '83'
-  release_year: '2007'
-  title: Taare Zameen Par
-- imdb_rating: '8.3'
-  rank: '84'
   release_year: '1984'
   title: Amadeus
+- imdb_rating: '8.3'
+  rank: '84'
+  release_year: '2007'
+  title: Taare Zameen Par
 - imdb_rating: '8.3'
   rank: '85'
   release_year: '1983'
@@ -373,12 +373,12 @@ top_rated_movies:
   title: "M - Eine Stadt sucht einen M\xF6rder"
 - imdb_rating: '8.3'
   rank: '94'
-  release_year: '2019'
-  title: '1917'
-- imdb_rating: '8.3'
-  rank: '95'
   release_year: '2016'
   title: Dangal
+- imdb_rating: '8.3'
+  rank: '95'
+  release_year: '2019'
+  title: '1917'
 - imdb_rating: '8.3'
   rank: '96'
   release_year: '2004'
@@ -593,12 +593,12 @@ top_rated_movies:
   title: There Will Be Blood
 - imdb_rating: '8.1'
   rank: '149'
-  release_year: '1961'
-  title: Judgment at Nuremberg
-- imdb_rating: '8.1'
-  rank: '150'
   release_year: '1948'
   title: The Treasure of the Sierra Madre
+- imdb_rating: '8.1'
+  rank: '150'
+  release_year: '1961'
+  title: Judgment at Nuremberg
 - imdb_rating: '8.1'
   rank: '151'
   release_year: '2017'
@@ -821,12 +821,12 @@ top_rated_movies:
   title: 'Mad Max: Fury Road'
 - imdb_rating: '8.1'
   rank: '206'
-  release_year: '1986'
-  title: Stand by Me
-- imdb_rating: '8.1'
-  rank: '207'
   release_year: '1976'
   title: Network
+- imdb_rating: '8.1'
+  rank: '207'
+  release_year: '1986'
+  title: Stand by Me
 - imdb_rating: '8.1'
   rank: '208'
   release_year: '1967'
@@ -985,17 +985,17 @@ top_rated_movies:
   title: La battaglia di Algeri
 - imdb_rating: '8.0'
   rank: '247'
-  release_year: '1957'
-  title: "Kumonosu-j\xF4"
-- imdb_rating: '8.0'
-  rank: '248'
   release_year: '2004'
   title: 'Swades: We, the People'
 - imdb_rating: '8.0'
-  rank: '249'
-  release_year: '1997'
-  title: "Shin seiki Evangelion Gekij\xF4-ban: Air/Magokoro wo, kimi ni"
+  rank: '248'
+  release_year: '1957'
+  title: "Kumonosu-j\xF4"
 - imdb_rating: '8.0'
-  rank: '250'
+  rank: '249'
   release_year: '2000'
   title: Hera Pheri
+- imdb_rating: '8.0'
+  rank: '250'
+  release_year: '1997'
+  title: "Shin seiki Evangelion Gekij\xF4-ban: Air/Magokoro wo, kimi ni"
