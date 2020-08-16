@@ -1,0 +1,56 @@
+<item>
+  <field name="Period">Tonight</field>
+  <field name="Full_descriptions">Isolated showers and thunderstorms after midnight.  Partly cloudy, with a low around 74. South southeast wind around 5 mph.  Chance of precipitation is 20%.</field>
+</item>
+<item>
+  <field name="Period">Sunday</field>
+  <field name="Full_descriptions">A 20 percent chance of showers and thunderstorms before noon.  Mostly sunny, with a high near 88. Southeast wind 5 to 10 mph. </field>
+</item>
+<item>
+  <field name="Period">Sunday Night</field>
+  <field name="Full_descriptions">Partly cloudy, with a low around 71. South southwest wind 5 to 10 mph becoming light and variable  after midnight. </field>
+</item>
+<item>
+  <field name="Period">Monday</field>
+  <field name="Full_descriptions">Mostly sunny, with a high near 90. South southeast wind around 5 mph becoming southwest in the afternoon. </field>
+</item>
+<item>
+  <field name="Period">Monday Night</field>
+  <field name="Full_descriptions">Mostly clear, with a low around 72. Southwest wind around 5 mph becoming calm  after midnight. </field>
+</item>
+<item>
+  <field name="Period">Tuesday</field>
+  <field name="Full_descriptions">Sunny, with a high near 93.</field>
+</item>
+<item>
+  <field name="Period">Tuesday Night</field>
+  <field name="Full_descriptions">Mostly clear, with a low around 72.</field>
+</item>
+<item>
+  <field name="Period">Wednesday</field>
+  <field name="Full_descriptions">Sunny, with a high near 95.</field>
+</item>
+<item>
+  <field name="Period">Wednesday Night</field>
+  <field name="Full_descriptions">Mostly clear, with a low around 72.</field>
+</item>
+<item>
+  <field name="Period">Thursday</field>
+  <field name="Full_descriptions">Sunny, with a high near 92.</field>
+</item>
+<item>
+  <field name="Period">Thursday Night</field>
+  <field name="Full_descriptions">Mostly clear, with a low around 71.</field>
+</item>
+<item>
+  <field name="Period">Friday</field>
+  <field name="Full_descriptions">Mostly sunny, with a high near 89.</field>
+</item>
+<item>
+  <field name="Period">Friday Night</field>
+  <field name="Full_descriptions">Partly cloudy, with a low around 70.</field>
+</item>
+<item>
+  <field name="Period">Saturday</field>
+  <field name="Full_descriptions">Mostly sunny, with a high near 88.</field>
+</item>
