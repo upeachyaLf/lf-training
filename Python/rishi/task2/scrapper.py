@@ -8,9 +8,9 @@ from bs4 import BeautifulSoup
 
 from utils import CsvCreator
 
-FileName = 'search.csv'
+inputfile = 'search.csv'
+outputfile = 'searchedData.csv'
 
-#https://www.daraz.com.np/catalog/?q=speaker&_keyori=ss&from=input&spm=a2a0e.11779170.search.go.287d2d2bFvrk5D
 DARAZ_BASE_URL = "https://www.daraz.com.np/"
 DARAZ_SEARCH_URL = f"{DARAZ_BASE_URL}catalog/?q="
 
@@ -42,24 +42,23 @@ def request_and_get_soup(url):
 
     return BeautifulSoup(response.text, 'lxml')
 
-def write_to_file(html):
+def debug_html(html):
     with open('daraz.html', mode='w') as debug_file:
         debug_file.write(str(html))
 
-
 def write_to_csv(data):
-    print(data.title)
-    csv_to = CsvCreator('searched_data.csv', fieldname)
-    # csv_to.write_to_file(data)
+    csv_to = CsvCreator(outputfile, fieldname)
+    csv_to.write_to_file(data)
 
 def scrape_product(product_url):
-    title = ''
-    price = ''
-    url_link = ''
-    image_url = ''
-    description = ''
-    ratings = 0
-    brand = ''
+    row = {}
+    row["title"] = 'UnKnown'
+    row["price"] = 'UnKnown'
+    row["url_link"] = 'UnKnown'
+    row["image_url"] = 'UnKnown'
+    row["description"] = 'UnKnown'
+    row["aggregateRating"] = 0
+    row["brand"] = 'UnKnown'
 
     soup = request_and_get_soup(product_url)
     if not soup:
@@ -68,17 +67,18 @@ def scrape_product(product_url):
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[0].string)
     
     try:
-        title = soup.find('span', class_="breadcrumb_item_anchor breadcrumb_item_anchor_last").text
-        price = searched_result['offers']['priceCurrency'] + ': ' + str(max(searched_result['offers']['lowPrice'], searched_result['offers']['highPrice']))  
-        url_link = searched_result['url']
-        image_url = searched_result['image']
-        description = searched_result['description']
-        ratings = searched_result['aggregateRating']
-        brand = searched_result['brand']['name']
-    except AttributeError:
+        row["title"] = soup.find('span', class_="breadcrumb_item_anchor breadcrumb_item_anchor_last").text
+        row["price"] = searched_result['offers']['priceCurrency'] + ': ' + str(max(searched_result['offers']['lowPrice'], searched_result['offers']['highPrice']))  
+        row["url_link"] = searched_result['url']
+        row["image_url"] = searched_result['image']
+        row["description"] = searched_result['description']
+        row["aggregateRating"] = searched_result['aggregateRating']
+        row["brand"] = searched_result['brand']['name']
+    except KeyError:
         pass
     
-    return ConcernedFields(title, price, url_link, image_url, description, ratings, brand)
+    return row 
+    #ConcernedFields(title, price, url_link, image_url, description, ratings, brand)
 
 def scrape_from_page(soup):
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[1].string)
@@ -89,10 +89,9 @@ def scrape_from_page(soup):
         product_url = i["url"]
         concerned_data = scrape_product(product_url)
         write_to_csv(concerned_data)
-        break
         
-def get_search_terms_from_file(filename):
-    with open(filename, mode='r') as fp:
+def get_search_terms_from_file(inputfile):
+    with open(inputfile, mode='r') as fp:
         csv_reader = csv.reader(fp, delimiter=',')
         line_count = 0
         for search_term in csv_reader:
@@ -106,15 +105,13 @@ def get_search_terms_from_file(filename):
                 return 
             scrape_from_page(soup)
             time.sleep(5)
-            break
-
 
 if __name__ == "__main__":
-    if not os.path.isfile(FileName):
-        CsvCreator(FileName, 'Search Term')
+    if not os.path.isfile(inputfile):
+        CsvCreator(inputfile, ['Search Term'])
         print('Input Your Search Terms for Daraz')
     else:
-        get_search_terms_from_file(FileName)
+        get_search_terms_from_file(inputfile)
         
     
 
