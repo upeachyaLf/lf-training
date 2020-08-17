@@ -1,78 +1,120 @@
 import os
 import csv
 import time
+import json
 
 import requests
 from bs4 import BeautifulSoup
 
-HAMROBAZAR_BASE_URL = "https://hamrobazaar.com/"
-HAMROBAZER_SEARCH = f"{HAMROBAZAR_BASE_URL}search.php" 
+from utils import CsvCreator
 
-CARS_CATID = 48
-MOBILE_CATID = 2
-ELECTRONICS_CATID = 4
+FileName = 'search.csv'
 
-HB_CAR_BRANDS = ["Madza", "Hyundai", "Chevrolet", "Daihatsu"]
+#https://www.daraz.com.np/catalog/?q=speaker&_keyori=ss&from=input&spm=a2a0e.11779170.search.go.287d2d2bFvrk5D
+DARAZ_BASE_URL = "https://www.daraz.com.np/"
+DARAZ_SEARCH_URL = f"{DARAZ_BASE_URL}catalog/?q="
 
-SEARCH_LOCATION = "Kathmandu"
-AUTO_MOBILE_SEARCH_URL = f"{HAMROBAZER_SEARCH}?do_search=Search&order=&way=&searchword=&catid_search={CARS_CATID}&city_search={SEARCH_LOCATION}&do_search=Search"
+fieldname = ['title',
+             'brand', 
+             'price',
+             'aggregateRating',
+             'image_url',
+             'description',
+             'url_link'
+             ]
 
-HEADERS = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36'}
+class ConcernedFields:
+    def __init__(self, title, price, url_link, image_url, description, ratings, brand):
+        self.title = title
+        self.brand = brand
+        self.price = price
+        self.description = description
+        self.aggregateRating = ratings
+        self.image_url = image_url
+        self.url_link = url_link
 
-CAR_INFO = [
-    "Name",
-    "Make Year",
-    "Kilometers Run",
-    "Fuel Type",
-    "Price",
-    "Location",
-    "Seller",
-    "Condition"
-]
-
-def request_and_get_soup(url, headers=None):
-    res = requests.get(url, headers= headers)
-    if not res.ok:
+def request_and_get_soup(url):
+    if not url.startswith('https'):
+        url = f"{DARAZ_SEARCH_URL}{url}" 
+    response = requests.get(url)
+    if not response.ok:
         return 
-    return BeautifulSoup(res.text, 'lxml')
 
-def get_per_car_url_list(brands):
-    listed_cars_url = []
-    for car_brand in HB_CAR_BRANDS:
-        if car_brand in brands:
-            listed_cars_url.append(AUTO_MOBILE_SEARCH_URL.replace('&searchword=', f'&searchword={car_brand.lower()}'))
-        else:
-            print(f"Brand:{car_brand} Not found")
-    
-    return listed_cars_url
-
-def scrape_for_cars(soup):
-    parent_table = soup.find_all('table', {"align": "center" })
-    write_to_file(str(parent_table))
+    return BeautifulSoup(response.text, 'lxml')
 
 def write_to_file(html):
-    with open('hamrobazar.html', mode='w') as debug_file:
-        debug_file.write(html)
+    with open('daraz.html', mode='w') as debug_file:
+        debug_file.write(str(html))
 
-def scrape_from_page(url):
-    if not url.startswith("https"):
-        url = f"{HAMROBAZAR_BASE_URL}{url}"
-    
-    soup1 = request_and_get_soup(url, HEADERS)
-    if not soup1:
-        return 
 
-    categories = soup1.find('select', {"name": "catid_search"}).findChildren()
-    brands = [category.get_text(strip=True) for category in categories]
-    url_list = get_per_car_url_list(brands[3:])
+def write_to_csv(data):
+    print(data.title)
+    csv_to = CsvCreator('searched_data.csv', fieldname)
+    # csv_to.write_to_file(data)
+
+def scrape_product(product_url):
+    title = ''
+    price = ''
+    url_link = ''
+    image_url = ''
+    description = ''
+    ratings = 0
+    brand = ''
+
+    soup = request_and_get_soup(product_url)
+    if not soup:
+        return
+
+    searched_result = json.loads(soup.find_all('script', type='application/ld+json')[0].string)
     
-    for url in url_list:
-        soup = request_and_get_soup(url, HEADERS)
-        scrape_for_cars(soup)
+    try:
+        title = soup.find('span', class_="breadcrumb_item_anchor breadcrumb_item_anchor_last").text
+        price = searched_result['offers']['priceCurrency'] + ': ' + str(max(searched_result['offers']['lowPrice'], searched_result['offers']['highPrice']))  
+        url_link = searched_result['url']
+        image_url = searched_result['image']
+        description = searched_result['description']
+        ratings = searched_result['aggregateRating']
+        brand = searched_result['brand']['name']
+    except AttributeError:
+        pass
+    
+    return ConcernedFields(title, price, url_link, image_url, description, ratings, brand)
+
+def scrape_from_page(soup):
+    searched_result = json.loads(soup.find_all('script', type='application/ld+json')[1].string)
+
+    assert "itemListElement" in searched_result
+
+    for i in searched_result["itemListElement"]:
+        product_url = i["url"]
+        concerned_data = scrape_product(product_url)
+        write_to_csv(concerned_data)
         break
+        
+def get_search_terms_from_file(filename):
+    with open(filename, mode='r') as fp:
+        csv_reader = csv.reader(fp, delimiter=',')
+        line_count = 0
+        for search_term in csv_reader:
+            if line_count == 0:
+                line_count += 1
+                continue
+            search_url = DARAZ_SEARCH_URL.replace("?q=", f"?q={search_term[0]}")
+            print(search_url)
+            soup = request_and_get_soup(search_url)
+            if not soup:
+                return 
+            scrape_from_page(soup)
+            time.sleep(5)
+            break
 
-    return 
 
 if __name__ == "__main__":
-    scrape_from_page(AUTO_MOBILE_SEARCH_URL)
+    if not os.path.isfile(FileName):
+        CsvCreator(FileName, 'Search Term')
+        print('Input Your Search Terms for Daraz')
+    else:
+        get_search_terms_from_file(FileName)
+        
     
+
