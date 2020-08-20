@@ -114,8 +114,7 @@ def store_in_sqlite(table_name, data_list):
 def read_from_sqlite(table_name):
     data = sh.fetch_all(table_name)
 
-    for row in data:
-        print(row)
+    print(data)
 
 
 def store_in_mongo_db(table_name, data_list):
@@ -123,10 +122,9 @@ def store_in_mongo_db(table_name, data_list):
 
 
 def read_from_mongo_db(collection_name):
-    data = mh.fetch_all(table_name)
+    data = mh.fetch_all(collection_name)
 
-    for document in data:
-        print(document)
+    print(data)
 
 
 def request_and_get_soup(url):

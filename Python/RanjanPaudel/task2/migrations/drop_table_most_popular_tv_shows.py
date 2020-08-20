@@ -4,10 +4,9 @@ imdb_movies_db = 'sqlite_dbs/imdb_movies.db'
 
 
 def drop_table():
-    connection = sqlite3.connect(imdb_movies_db)
-    connection.execute('DROP TABLE most_popular_tv_shows')
-    connection.commit()
-    connection.close()
+    with sqlite3.connect(imdb_movies_db) as connection:
+        connection.execute('DROP TABLE most_popular_tv_shows')
+        connection.commit()
 
 
 if __name__ == "__main__":

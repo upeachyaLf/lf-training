@@ -37,23 +37,20 @@ if __name__ == "sqlite_handler":
     def insert_many(table_name, dict_list):
         tuple_list = genarate_tuple_list(dict_list)
 
-        conn = sqlite3.connect(top_rated_db)
-        conn.executemany(f'''
-                INSERT INTO {table_name} {table_all_columns[table_name]} VALUES{table_all_column_binds[table_name]}
-        ''', tuple_list)
+        with sqlite3.connect(top_rated_db) as conn:
+            conn.executemany(f'''
+                    INSERT INTO {table_name} {table_all_columns[table_name]} VALUES{table_all_column_binds[table_name]}
+            ''', tuple_list)
 
-        conn.commit()
-        conn.close()
+            conn.commit()
 
     def fetch_all(table_name):
-        conn = sqlite3.connect(top_rated_db)
-        conn.row_factory = dict_factory
-        cur = conn.cursor()
-
         dict_list = []
-        for row in cur.execute(f'SELECT * FROM {table_name}'):
-            dict_list.append(row)
+        with sqlite3.connect(top_rated_db) as conn:
+            conn.row_factory = dict_factory
+            cur = conn.cursor()
 
-        conn.close()
+            for row in cur.execute(f'SELECT * FROM {table_name}'):
+                dict_list.append(row)
 
         return dict_list

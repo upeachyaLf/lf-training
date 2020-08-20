@@ -2,25 +2,20 @@ from pymongo import MongoClient
 
 if __name__ == "mongo_handler":
     def insert_many(coll_name, dict_list):
-        db_client = MongoClient(host='localhost', port=27017)
-        db = db_client.imdb_movies
-        coll = db[coll_name]
+        with MongoClient(host='localhost', port=27017) as db_client:
+            db = db_client.imdb_movies
+            coll = db[coll_name]
 
-        coll.insert_many(dict_list)
-
-        db_client.close()
+            coll.insert_many(dict_list)
 
     def fetch_all(coll_name):
-        db_client = MongoClient(host='localhost', port=27017)
-        db = db_client.imdb_movies
-        coll = db[coll_name]
-
-        cursor = coll.find({}, {'_id': 0})
-
         document_list = []
-        for cur in cursor:
-            document_list.append(cur)
+        with MongoClient(host='localhost', port=27017) as db_client:
+            db = db_client.imdb_movies
+            coll = db[coll_name]
+            cursor = coll.find({}, {'_id': 0})
 
-        db_client.close()
+            for cur in cursor:
+                document_list.append(cur)
 
         return document_list
