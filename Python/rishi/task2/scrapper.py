@@ -46,22 +46,22 @@ def debug_html(html):
     with open('daraz.html', mode='w') as debug_file:
         debug_file.write(str(html))
 
-def get_filename(name):
+def get_filepath_name(path, name):
     filename = ''.join(s.strip() for s in name)
-    return f"{directory_path}/{filename}"
+    return f"{path}/{filename}"
 
 
 def write_to_csv(fp, contents):
-    filename = get_filename(fp)
-    output_file_handle = CsvCreator(filename, fieldname)
+    filepath = get_filepath_name(directory_path, fp)
+    output_file_handle = CsvCreator(filepath, fieldname)
     for brand, rows in contents.items():
         for row in rows:
             output_file_handle.write_to_file(row)
     return
 
 def write_to_yaml(fp, contents):
-    filename = get_filename(fp) + '.yaml'
-    with open(filename, 'w') as file_:
+    filepath = get_filepath_name(directory_path,fp) + '.yaml'
+    with open(filepath, 'w') as file_:
         yaml.dump(contents, file_)
 
 def scrape_product(soup):

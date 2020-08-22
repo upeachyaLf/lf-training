@@ -1,9 +1,11 @@
 import pytest
 
-from scrapper import get_per_car_url_list, AUTO_MOBILE_SEARCH_URL
+from scrapper import get_filepath_name
 
-def test_get_per_car_url_list():
-    l1 = ['Hyundai']
-    result = get_per_car_url_list(l1)
+def test_get_filepath_name():
+    filename = 'searchfile'
+    filepath = 'home/lf/rishi'
 
-    assert result == [AUTO_MOBILE_SEARCH_URL.replace('&searchword=', f'&searchword={l1[0].lower()}')]
+    result = get_filepath_name(filepath, filename)
+    assert result == 'home/lf/rishi/searchfile'
+    
