@@ -2,5 +2,4 @@ __pycache__
 .vscode
 .pytest_cache
 *.html
-searchedData.csv
-search.csv
+*.csv

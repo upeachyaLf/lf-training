@@ -3,20 +3,28 @@ import csv
 import time
 import json
 import urllib.parse as up
+from functools import reduce
 
 import requests
 from bs4 import BeautifulSoup
 
 from utils import CsvCreator
 
-inputfile = 'search.csv'
-outputfile = 'searchedData.csv'
+inputfile = 'searchfile.csv'
+directory_name = 'searchResults'
+base_dir_path = os.getcwd()
+
+directory_path = f"{base_dir_path}/{directory_name}" 
+print(directory_path)
+if not os.path.exists(directory_name):
+    os.makedirs(directory_name)
 
 DARAZ_BASE_URL = "https://www.daraz.com.np/"
 DARAZ_SEARCH_URL = f"{DARAZ_BASE_URL}catalog/?q="
 
-fieldname = ['title',
-             'brand', 
+fieldname = [
+             'brand',
+             'title',
              'price',
              'aggregateRating',
              'image_url',
@@ -34,12 +42,12 @@ class ConcernedFields:
         self.image_url = image_url
         self.url_link = url_link
 
-def request_and_get_soup(url):
-    if not url.startswith('https'):
-        url = f"{DARAZ_SEARCH_URL}{url}" 
-    response = requests.get(url)
+def request_and_get_soup(search_url):
+    if not search_url.startswith('https'):
+        search_url = f"{DARAZ_SEARCH_URL}{search_url}" 
+    response = requests.get(search_url)
     if not response.ok:
-        return 
+        return
 
     return BeautifulSoup(response.text, 'lxml')
 
@@ -47,72 +55,100 @@ def debug_html(html):
     with open('daraz.html', mode='w') as debug_file:
         debug_file.write(str(html))
 
-def write_to_csv(data):
-    csv_to = CsvCreator(outputfile, fieldname)
-    csv_to.write_to_file(data)
+def write_to_csv(fp, contents):
+    name = ''.join(s.strip() for s in fp)
+    filename = f"{directory_path}/{name}"
+    print(filename)
+    output_file_handle = CsvCreator(filename, fieldname)
+    for brand, rows in contents.items():
+        for row in rows:
+            print(row)
+            output_file_handle.write_to_file(row)
 
-def scrape_product(product_url):
-    row = {}
-    row["title"] = 'UnKnown'
-    row["price"] = 'UnKnown'
-    row["url_link"] = 'UnKnown'
-    row["image_url"] = 'UnKnown'
-    row["description"] = 'UnKnown'
-    row["aggregateRating"] = 0
-    row["brand"] = 'UnKnown'
-
-    soup = request_and_get_soup(product_url)
-    if not soup:
-        return
-
+def scrape_product(soup):
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[0].string)
-    
+    row = {}    
     try:
         row["title"] = soup.find('span', class_="breadcrumb_item_anchor breadcrumb_item_anchor_last").text
         row["price"] = searched_result['offers']['priceCurrency'] + ': ' + str(max(searched_result['offers']['lowPrice'], searched_result['offers']['highPrice']))  
         row["url_link"] = searched_result['url']
-        row["image_url"] = searched_result['image']
-        row["description"] = searched_result['description']
-        row["aggregateRating"] = searched_result['aggregateRating']
+        row["image_url"] = searched_result['image'] if hasattr(searched_result, 'image') else 'No Image'
+        row["description"] = searched_result['description'] if hasattr(searched_result, 'description') else 'No Description'
+        row["aggregateRating"] = searched_result['aggregateRating'] if hasattr(searched_result, 'aggregateRating') else 'N/A'
         row["brand"] = searched_result['brand']['name']
-    except KeyError:
-        pass
-    
+    except KeyError as err:
+        print(f'KeyError:***\n{err}')
+        raise
     return row 
-    #ConcernedFields(title, price, url_link, image_url, description, ratings, brand)
 
-def scrape_from_page(soup):
+def search_for_items(soup):
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[1].string)
 
     assert "itemListElement" in searched_result
-
-    for i in searched_result["itemListElement"]:
-        product_url = i["url"]
-        concerned_data = scrape_product(product_url)
-        write_to_csv(concerned_data)
+    product_url =[]
+    for item in searched_result["itemListElement"]:
+        product_url.append(item["url"])
+    
+    return product_url
         
 def get_search_terms_from_file(inputfile):
     with open(inputfile, mode='r') as fp:
         csv_reader = csv.DictReader(fp, delimiter=',')
-        print(csv_reader)
+        search_urls = {}
         for reader in csv_reader:
             query = reader['SearchTerm']
 
             #Encode query param string
             query_param = up.quote(query) 
             search_url = DARAZ_SEARCH_URL.replace("?q=", f"?q={query_param}")
-            soup = request_and_get_soup(search_url)
+            search_urls[query] = search_url  
+        return search_urls
+
+def flatten_brand_as_key(acc, product_content):
+    if acc.get(product_content['brand']):
+        value = acc.get(product_content['brand'])
+        content = value
+        content.append(product_content)
+        acc[product_content['brand']] = content 
+        return acc
+    acc[product_content['brand']] = [product_content]
+    return acc
+
+def scrapper():
+    search_urls = get_search_terms_from_file(inputfile)
+    products = {}
+    for search_term, search_url in search_urls.items():
+        soup = request_and_get_soup(search_url)
+
+        if not soup:
+            return
+        
+        searched_products_list = search_for_items(soup)
+        products[search_term] = searched_products_list 
+        time.sleep(5)
+    product_contents ={}
+    for product, product_urls in products.items():
+        info = []
+        for url in product_urls:
+            soup = request_and_get_soup(url)
+
             if not soup:
-                return 
-            scrape_from_page(soup)
-            time.sleep(5)
+                return
+            
+            info.append(scrape_product(soup))
+            time.sleep(3)
+        product_contents[product] = info
+    debug_html(product_contents)
+    result = {}
+    for product, contents in product_contents.items():
+        get_result = reduce(flatten_brand_as_key,contents, {})
+        result[product] = get_result
+    debug_html(result)
+    for brand, content in result.items():
+        write_to_csv(brand, content)
 
 if __name__ == "__main__":
     if not os.path.isfile(inputfile):
         CsvCreator(inputfile, ['SearchTerm'])
         print('Input Your Search Terms for Daraz')
-
-    get_search_terms_from_file(inputfile)
-        
-    
-
+    scrapper()

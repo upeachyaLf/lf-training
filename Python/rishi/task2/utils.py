@@ -2,7 +2,7 @@ import csv
 
 class CsvCreator:
     def __init__(self, filename, headers):
-        self.filename = filename
+        self.filename = filename + '.csv' if not filename.endswith('.csv') else filename
         self.headers = headers
         self.createfile()
     
