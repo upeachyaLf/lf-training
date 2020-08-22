@@ -40,19 +40,18 @@ def store_data_in_db(json_data, header, filename=DEFAULT_FILENAME):
     ''' Store data in DB '''
     print('\nStoring data in SQLite database...')
     conn = sqlite3.connect(f'{OUTPUT_FOLDER}/{filename}.db')
-    cursor = conn.cursor()
     fields = ''.join([(lambda head: str(head)+' text,')(head) for head in header])
-    cursor.execute('CREATE TABLE IF NOT EXISTS data({})'.format(fields[:-1]))
-    total = len(json_data['data'])
-    saved = 0
-    for data in json_data['data']:
-        values = ''.join([(lambda key: '"'+str(data[key].replace('"',"''"))+'",')(key) for key in data])
-        cursor.execute(f'INSERT INTO data values ({values[:-1]})')
-        conn.commit()
-        saved += 1
-        os.system(f'echo -ne "\r[{saved}/{total}]"')
-        for i in range(saved if saved < 50 else 50):
-            os.system(f'echo -ne "#"')
+    with conn as cursor:
+        cursor.execute('CREATE TABLE IF NOT EXISTS data({})'.format(fields[:-1]))
+        total = len(json_data['data'])
+        saved = 0
+        for data in json_data['data']:
+            values = ''.join([(lambda key: '"'+str(data[key].replace('"',"''"))+'",')(key) for key in data])
+            cursor.execute(f'INSERT INTO data values ({values[:-1]})')
+            saved += 1
+            os.system(f'echo -ne "\r[{saved}/{total}]"')
+            for i in range(saved if saved < 50 else 50):
+                os.system(f'echo -ne "#"')
         
     conn.close()
     print(f'\nSQLite database file: {OUTPUT_FOLDER}/{filename}.db    Table name: data')
