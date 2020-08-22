@@ -6,22 +6,22 @@ from bs4 import BeautifulSoup
 
 URL = 'https://www.opencodez.com/category/web-development'
 
-def scrap_page_title(soupObject):
-    title_divs = soupObject.findAll('h2',{'class':'title'})
+def scrap_page_title(soup_object):
+    title_divs = soup_object.findAll('h2',{'class':'title'})
     titles = []
     for title in title_divs:
         titles.append(title.get_text())   
     return titles  
 
-def scrap_page_authors(soupObject):
-    author_divs = soupObject.findAll('a',attrs={'rel':'author'})
+def scrap_page_authors(soup_object):
+    author_divs = soup_object.findAll('a',attrs={'rel':'author'})
     authors = []
     for author in author_divs:
         authors.append(author.get_text())
     return authors
 
-def get_total_pages(soupObject):
-    pagination_div = soupObject.find('div',{'class':'pagination'})
+def get_total_pages(soup_object):
+    pagination_div = soup_object.find('div',{'class':'pagination'})
     return len(pagination_div.findAll('li'))
 
 def save_as_csv (all_titles, all_authors):
@@ -54,10 +54,6 @@ def main():
 
     save_as_csv(all_titles, all_authors)
     save_as_json(all_titles, all_authors)
-
-    import pdb
-    pdb.set_trace()
-
 
 if __name__ == "__main__":
     main()
