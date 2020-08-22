@@ -10,6 +10,7 @@ import requests
 from bs4 import BeautifulSoup
 
 from utils import CsvCreator
+from db import create_table, store_data 
 
 inputfile = 'searchfile.csv'
 directory_name = 'searchResults'
@@ -50,6 +51,9 @@ def get_filepath_name(path, name):
     filename = ''.join(s.strip() for s in name)
     return f"{path}/{filename}"
 
+def store_to_database(result):
+    search_terms = [search_term for search_term in result]
+    store_data('search_term', search_terms)
 
 def write_to_csv(fp, contents):
     filepath = get_filepath_name(directory_path, fp)
@@ -143,14 +147,17 @@ def scrapper():
         get_result = reduce(flatten_brand_as_key,contents, {})
         result[product] = get_result
     debug_html(result)
+
     for brand, content in result.items():
         write_to_csv(brand, content)
         write_to_yaml(brand, content)
     
+    store_to_database(result)
     return
 
 if __name__ == "__main__":
     if not os.path.isfile(inputfile):
         CsvCreator(inputfile, ['SearchTerm'])
         print('Input Your Search Terms for Daraz')
+    create_table()
     scrapper()
