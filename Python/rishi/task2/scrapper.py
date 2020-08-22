@@ -2,6 +2,7 @@ import os
 import csv
 import time
 import json
+import urllib.parse as up
 
 import requests
 from bs4 import BeautifulSoup
@@ -92,14 +93,14 @@ def scrape_from_page(soup):
         
 def get_search_terms_from_file(inputfile):
     with open(inputfile, mode='r') as fp:
-        csv_reader = csv.reader(fp, delimiter=',')
-        line_count = 0
-        for search_term in csv_reader:
-            if line_count == 0:
-                line_count += 1
-                continue
-            search_url = DARAZ_SEARCH_URL.replace("?q=", f"?q={search_term[0]}")
-            print(search_url)
+        csv_reader = csv.DictReader(fp, delimiter=',')
+        print(csv_reader)
+        for reader in csv_reader:
+            query = reader['SearchTerm']
+
+            #Encode query param string
+            query_param = up.quote(query) 
+            search_url = DARAZ_SEARCH_URL.replace("?q=", f"?q={query_param}")
             soup = request_and_get_soup(search_url)
             if not soup:
                 return 
@@ -108,10 +109,10 @@ def get_search_terms_from_file(inputfile):
 
 if __name__ == "__main__":
     if not os.path.isfile(inputfile):
-        CsvCreator(inputfile, ['Search Term'])
+        CsvCreator(inputfile, ['SearchTerm'])
         print('Input Your Search Terms for Daraz')
-    else:
-        get_search_terms_from_file(inputfile)
+
+    get_search_terms_from_file(inputfile)
         
     
 
