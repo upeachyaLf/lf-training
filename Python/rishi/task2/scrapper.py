@@ -33,16 +33,6 @@ fieldname = [
              'url_link'
              ]
 
-class ConcernedFields:
-    def __init__(self, title, price, url_link, image_url, description, ratings, brand):
-        self.title = title
-        self.brand = brand
-        self.price = price
-        self.description = description
-        self.aggregateRating = ratings
-        self.image_url = image_url
-        self.url_link = url_link
-
 def request_and_get_soup(search_url):
     if not search_url.startswith('https'):
         search_url = f"{DARAZ_SEARCH_URL}{search_url}" 
