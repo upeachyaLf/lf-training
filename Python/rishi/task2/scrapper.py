@@ -4,6 +4,7 @@ import time
 import json
 import urllib.parse as up
 from functools import reduce
+import yaml
 
 import requests
 from bs4 import BeautifulSoup
@@ -15,7 +16,7 @@ directory_name = 'searchResults'
 base_dir_path = os.getcwd()
 
 directory_path = f"{base_dir_path}/{directory_name}" 
-print(directory_path)
+
 if not os.path.exists(directory_name):
     os.makedirs(directory_name)
 
@@ -55,15 +56,23 @@ def debug_html(html):
     with open('daraz.html', mode='w') as debug_file:
         debug_file.write(str(html))
 
+def get_filename(name):
+    filename = ''.join(s.strip() for s in name)
+    return f"{directory_path}/{filename}"
+
+
 def write_to_csv(fp, contents):
-    name = ''.join(s.strip() for s in fp)
-    filename = f"{directory_path}/{name}"
-    print(filename)
+    filename = get_filename(fp)
     output_file_handle = CsvCreator(filename, fieldname)
     for brand, rows in contents.items():
         for row in rows:
-            print(row)
             output_file_handle.write_to_file(row)
+    return
+
+def write_to_yaml(fp, contents):
+    filename = get_filename(fp) + '.yaml'
+    with open(filename, 'w') as file_:
+        yaml.dump(contents, file_)
 
 def scrape_product(soup):
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[0].string)
@@ -146,6 +155,9 @@ def scrapper():
     debug_html(result)
     for brand, content in result.items():
         write_to_csv(brand, content)
+        write_to_yaml(brand, content)
+    
+    return
 
 if __name__ == "__main__":
     if not os.path.isfile(inputfile):
