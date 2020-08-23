@@ -52,8 +52,14 @@ def get_filepath_name(path, name):
     return f"{path}/{filename}"
 
 def store_to_database(result):
-    search_terms = [search_term for search_term in result]
-    store_data('search_term', search_terms)
+    values = []
+    for key, contents in result.items():
+        for x in contents.keys():
+            for data in contents[x]:
+                value = tuple(i for i in data.values()) + (1,) #static Foreign Keys Reference Value
+                print(value)
+                values.append(value)
+    store_data(values)
 
 def write_to_csv(fp, contents):
     filepath = get_filepath_name(directory_path, fp)
@@ -75,7 +81,7 @@ def scrape_product(soup):
         row["title"] = soup.find('span', class_="breadcrumb_item_anchor breadcrumb_item_anchor_last").text
         row["price"] = searched_result['offers']['priceCurrency'] + ': ' + str(max(searched_result['offers']['lowPrice'], searched_result['offers']['highPrice']))  
         row["url_link"] = searched_result['url']
-        row["image_url"] = searched_result['image'] if hasattr(searched_result, 'image') else 'No Image'
+        row["image_url"] = searched_result['image']
         row["description"] = searched_result['description'] if hasattr(searched_result, 'description') else 'No Description'
         row["aggregateRating"] = searched_result['aggregateRating'] if hasattr(searched_result, 'aggregateRating') else 'N/A'
         row["brand"] = searched_result['brand']['name']

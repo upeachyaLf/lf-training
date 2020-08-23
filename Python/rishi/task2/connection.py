@@ -3,9 +3,6 @@ from psycopg2 import pool
 import os
 from config import connection_string
 
-connection_string = connection_string
-print(connection_string)
-
 def initialize_pool():
     global connection_pool
     MIN_POOL_SIZE = 1
