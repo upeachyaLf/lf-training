@@ -5,6 +5,7 @@ import requests
 import urllib.request
 from pandas import DataFrame 
 from bs4 import BeautifulSoup
+from multiprocessing import Pool
 
 URL = 'https://www.opencodez.com/category/web-development'
 
@@ -22,16 +23,13 @@ def scrap_page_authors(soup_object):
         authors.append(author.get_text())
     return authors
 
-def get_total_pages(soup_object):
-    pagination_div = soup_object.find('div',{'class':'pagination'})
-    return len(pagination_div.findAll('li'))
-
 def save_as_csv (all_titles, all_authors):
     df = DataFrame({'title':all_titles, 'authors':all_authors}) 
     df.to_csv('output/articles.csv', index=False, mode='a', encoding='utf-8')
 
 def generate_url_with_pagination(total_pages):
-    url_array = []
+    url_array = [URL]
+    # NOTE: starting from page 2 because page one url is already included in url_array
     for pageNumber in range(2, total_pages+1):
         url_array.append(URL + '/page/' + str(pageNumber))
     return url_array
@@ -42,17 +40,15 @@ def scrap_and_save_records(url):
     all_titles = scrap_page_title(soup)
     all_authors = scrap_page_authors(soup)
     save_as_csv(all_titles, all_authors)
-    time.sleep(3)
-    return soup
+    time.sleep(10)
 
 def main():
-    page_1_soup = scrap_and_save_records(URL)
-    total_pages = get_total_pages(page_1_soup)
-    print("total",total_pages)
+    total_pages = 5
     url_with_pagination = generate_url_with_pagination(total_pages)
-    print("pages",url_with_pagination)
-
-
+    url_with_pagination = generate_url_with_pagination(5)
+    pool = Pool()
+    pool.map(scrap_and_save_records, url_with_pagination)
+    pool.close()
 
 if __name__ == "__main__":
     main()
