@@ -9,17 +9,12 @@ import yaml
 import requests
 from bs4 import BeautifulSoup
 
-from utils import CsvCreator
-from db import create_table, store_data 
+from utils import CsvCreator, get_filepath_name
+from db import create_table, store_data
+from sqlitedb import store_in_sqlite
+from config import DIRECTORY_PATH, OUTPUT_FILE
 
 inputfile = 'searchfile.csv'
-directory_name = 'searchResults'
-base_dir_path = os.getcwd()
-
-directory_path = f"{base_dir_path}/{directory_name}" 
-
-if not os.path.exists(directory_name):
-    os.makedirs(directory_name)
 
 DARAZ_BASE_URL = "https://www.daraz.com.np/"
 DARAZ_SEARCH_URL = f"{DARAZ_BASE_URL}catalog/?q="
@@ -47,10 +42,6 @@ def debug_html(html):
     with open('daraz.html', mode='w') as debug_file:
         debug_file.write(str(html))
 
-def get_filepath_name(path, name):
-    filename = ''.join(s.strip() for s in name)
-    return f"{path}/{filename}"
-
 def format_price(data):
     if data.get('price'):
         price = data['price']
@@ -72,8 +63,17 @@ def store_to_database(result):
                 values.append(value)
     store_data('contents',values)
 
+def write_overall_result(contents):
+    filepath = get_filepath_name(OUTPUT_FILE)
+    op = CsvCreator(filepath, fieldname)
+    for key, rows in contents.items():
+        for row in rows:
+            op.write_to_file(row)
+    return
+
+
 def write_to_csv(fp, contents):
-    filepath = get_filepath_name(directory_path, fp)
+    filepath = get_filepath_name(fp)
     output_file_handle = CsvCreator(filepath, fieldname)
     for brand, rows in contents.items():
         for row in rows:
@@ -81,7 +81,7 @@ def write_to_csv(fp, contents):
     return
 
 def write_to_yaml(fp, contents):
-    filepath = get_filepath_name(directory_path,fp) + '.yaml'
+    filepath = get_filepath_name(fp) + '.yaml'
     with open(filepath, 'w') as file_:
         yaml.dump(contents, file_)
 
@@ -158,6 +158,9 @@ def scrapper():
             info.append(scrape_product(soup))
             time.sleep(3)
         product_contents[product] = info
+
+    write_overall_result(product_contents)
+
     result = {}
     for product, contents in product_contents.items():
         get_result = reduce(flatten_brand_as_key,contents, {})
@@ -176,3 +179,4 @@ if __name__ == "__main__":
         print('Input Your Search Terms for Daraz')
     create_table()
     scrapper()
+    store_in_sqlite()

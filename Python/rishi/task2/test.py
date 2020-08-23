@@ -3,7 +3,7 @@ import psycopg2
 import os
 import logging
 
-from scrapper import get_filepath_name
+from utils import get_filepath_name
 
 def test_get_filepath_name():
     filename = 'searchfile'

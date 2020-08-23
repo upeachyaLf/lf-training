@@ -1,5 +1,11 @@
 import csv
 
+from config import DIRECTORY_PATH
+
+def get_filepath_name(name):
+    filename = ''.join(s.strip() for s in name)
+    return f"{DIRECTORY_PATH}/{filename}"
+
 class CsvCreator:
     def __init__(self, filename, headers):
         self.filename = filename + '.csv' if not filename.endswith('.csv') else filename

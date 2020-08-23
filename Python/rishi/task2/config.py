@@ -3,6 +3,15 @@ load_dotenv()
 
 import os
 
+BASE_DIR_PATH=os.getcwd()
+OUTPUT_FILE='search_result.csv'
+DIRECTORY_NAME='searchResults'
+
+if not os.path.exists(DIRECTORY_NAME):
+    os.makedirs(DIRECTORY_NAME)
+
+DIRECTORY_PATH = f"{BASE_DIR_PATH}/{DIRECTORY_NAME}"
+
 connection_string = {
     'user': os.getenv('DB_USER'),
     'password': os.getenv('DB_PASSWORD'),
