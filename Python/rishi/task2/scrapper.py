@@ -1,33 +1,22 @@
 import os
-import csv
 import time
+import csv
 import json
 import urllib.parse as up
 from functools import reduce
-import yaml
 
 import requests
 from bs4 import BeautifulSoup
 
-from utils import CsvCreator, get_filepath_name
+from utils import CsvCreator, get_filepath_name, flatten_brand_as_key, format_price
 from db import create_table, store_data
 from sqlitedb import store_in_sqlite
-from config import DIRECTORY_PATH, OUTPUT_FILE
+from file_write import write_overall_result, write_to_csv, write_to_yaml
 
 inputfile = 'searchfile.csv'
 
 DARAZ_BASE_URL = "https://www.daraz.com.np/"
 DARAZ_SEARCH_URL = f"{DARAZ_BASE_URL}catalog/?q="
-
-fieldname = [
-             'brand',
-             'title',
-             'price',
-             'aggregateRating',
-             'image_url',
-             'description',
-             'url_link'
-             ]
 
 def request_and_get_soup(search_url):
     if not search_url.startswith('https'):
@@ -42,17 +31,9 @@ def debug_html(html):
     with open('daraz.html', mode='w') as debug_file:
         debug_file.write(str(html))
 
-def format_price(data):
-    if data.get('price'):
-        price = data['price']
-        result = float(price.split(':')[1].strip())
-        data['price'] = result
-    return data
-
 def store_to_database(result):
     values = []
     search_terms = [(i,) for i in result.keys()]
-    print(search_terms)
     store_data('search_term', search_terms)
     for key, contents in result.items():
         for x in contents.keys():
@@ -62,28 +43,6 @@ def store_to_database(result):
                 print(value)
                 values.append(value)
     store_data('contents',values)
-
-def write_overall_result(contents):
-    filepath = get_filepath_name(OUTPUT_FILE)
-    op = CsvCreator(filepath, fieldname)
-    for key, rows in contents.items():
-        for row in rows:
-            op.write_to_file(row)
-    return
-
-
-def write_to_csv(fp, contents):
-    filepath = get_filepath_name(fp)
-    output_file_handle = CsvCreator(filepath, fieldname)
-    for brand, rows in contents.items():
-        for row in rows:
-            output_file_handle.write_to_file(row)
-    return
-
-def write_to_yaml(fp, contents):
-    filepath = get_filepath_name(fp) + '.yaml'
-    with open(filepath, 'w') as file_:
-        yaml.dump(contents, file_)
 
 def scrape_product(soup):
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[0].string)
@@ -123,16 +82,6 @@ def get_search_terms_from_file(inputfile):
             search_url = DARAZ_SEARCH_URL.replace("?q=", f"?q={query_param}")
             search_urls[query] = search_url  
         return search_urls
-
-def flatten_brand_as_key(acc, product_content):
-    if acc.get(product_content['brand']):
-        value = acc.get(product_content['brand'])
-        content = value
-        content.append(product_content)
-        acc[product_content['brand']] = content 
-        return acc
-    acc[product_content['brand']] = [product_content]
-    return acc
 
 def scrapper():
     search_urls = get_search_terms_from_file(inputfile)

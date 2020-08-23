@@ -10,7 +10,7 @@ def create_table():
             with connection.cursor() as cur:
                 print('Creating Tables')
                 cur.execute(DROP_BRANDS_TABLE)
-                cur.execute(DROP_BRANDS_TABLE)
+                cur.execute(DROP_PRODUCTS_TABLE)
                 cur.execute(DROP_SEARCH_TERM_TABLE)
                 cur.execute(CREATE_SEARCH_TERM_TABLE)
                 cur.execute(CREATE_BRANDS_TABLE)

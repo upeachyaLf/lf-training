@@ -1,0 +1,36 @@
+import csv
+import yaml
+
+from utils import CsvCreator, get_filepath_name
+from config import DIRECTORY_PATH, OUTPUT_FILE
+
+fieldname = [
+             'brand',
+             'title',
+             'price',
+             'aggregateRating',
+             'image_url',
+             'description',
+             'url_link'
+             ]
+
+def write_overall_result(contents):
+    filepath = get_filepath_name(OUTPUT_FILE)
+    op = CsvCreator(filepath, fieldname)
+    for key, rows in contents.items():
+        for row in rows:
+            op.write_to_file(row)
+    return
+
+def write_to_csv(fp, contents):
+    filepath = get_filepath_name(fp)
+    output_file_handle = CsvCreator(filepath, fieldname)
+    for brand, rows in contents.items():
+        for row in rows:
+            output_file_handle.write_to_file(row)
+    return
+
+def write_to_yaml(fp, contents):
+    filepath = get_filepath_name(fp) + '.yaml'
+    with open(filepath, 'w') as file_:
+        yaml.dump(contents, file_)
