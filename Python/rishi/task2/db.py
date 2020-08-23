@@ -24,7 +24,9 @@ def insert_into_table(statement, data):
     try:
         with define_connection() as conn:
             with conn.cursor() as cur:
+                print('Insert Operation')
                 cur.executemany(statement, data)
+                print('Insert Operation Complete')
     except Exception as error:
         print('Insert Error')
         conn.rollback()

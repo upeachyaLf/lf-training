@@ -15,7 +15,7 @@ CREATE_BRANDS_TABLE = """
 	            REFERENCES search_terms(search_id)
                 ON DELETE CASCADE );"""
 
-CREATE_PRODUCTS_TABLE = """ CREATE TABLE products(result_id INT,
+CREATE_PRODUCTS_TABLE = """ CREATE TABLE products(product_id INT GENERATED ALWAYS AS IDENTITY,
                                                                 brand_name VARCHAR(30), 
                                                                 title text,
                                                                 price float,
@@ -23,10 +23,10 @@ CREATE_PRODUCTS_TABLE = """ CREATE TABLE products(result_id INT,
                                                                 image_url text,
                                                                 description text,
                                                                 url_link text,
-                                                                PRIMARY KEY(result_id)
+                                                                PRIMARY KEY(product_id)
                                                                 );"""
 
-INSERT_INTO_PRODUCTS_STATEMENT = """INSERT INTO results(title,price,url_link,image_url,description,aggregateRating,brand_name) VALUES (%s,%s,%s,%s,%s,%s,%s);"""
+INSERT_INTO_PRODUCTS_STATEMENT = """INSERT INTO products(title,price,url_link,image_url,description,aggregateRating,brand_name) VALUES (%s,%s,%s,%s,%s,%s,%s);"""
 INSERT_INTO_SEARCH_TABLE = """INSERT INTO search_terms(search_name) VALUES (%s);"""
 
 table_insert_statement_mapping = {

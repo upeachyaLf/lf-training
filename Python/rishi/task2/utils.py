@@ -22,7 +22,10 @@ def flatten_brand_as_key(acc, product_content):
         return acc
     acc[product_content['brand']] = [product_content]
     return acc
-    
+
+def build_db_format(data):
+    return tuple(i for i in data.values())  # + (1,) static Foreign Keys Reference Value
+
 class CsvCreator:
     def __init__(self, filename, headers):
         self.filename = filename + '.csv' if not filename.endswith('.csv') else filename

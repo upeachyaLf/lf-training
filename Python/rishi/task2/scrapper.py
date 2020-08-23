@@ -8,7 +8,7 @@ from functools import reduce
 import requests
 from bs4 import BeautifulSoup
 
-from utils import CsvCreator, get_filepath_name, flatten_brand_as_key, format_price
+from utils import CsvCreator, get_filepath_name, flatten_brand_as_key, format_price, build_db_format
 from db import create_table, store_data
 from sqlitedb import store_in_sqlite
 from file_write import write_overall_result, write_to_csv, write_to_yaml, write_to_json
@@ -39,8 +39,7 @@ def store_to_database(result):
         for x in contents.keys():
             for data_ in contents[x]:
                 data = format_price(data_)
-                value = tuple(i for i in data.values())  # + (1,) static Foreign Keys Reference Value
-                values.append(value)
+                values.append(build_db_format(data))
     store_data('contents',values)
 
 def scrape_product(soup):
@@ -93,7 +92,7 @@ def scrapper():
         
         searched_products_list = search_for_items(soup)
         products[search_term] = searched_products_list 
-        time.sleep(5)
+        # time.sleep(1.7)
     product_contents ={}
     for product, product_urls in products.items():
         info = []
@@ -104,7 +103,7 @@ def scrapper():
                 return
             
             info.append(scrape_product(soup))
-            time.sleep(3)
+            # time.sleep(1)
         product_contents[product] = info
 
     write_overall_result(product_contents)
