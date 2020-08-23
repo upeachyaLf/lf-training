@@ -1,5 +1,6 @@
 import csv
 import yaml
+import json
 
 from utils import CsvCreator, get_filepath_name
 from config import DIRECTORY_PATH, OUTPUT_FILE
@@ -34,3 +35,8 @@ def write_to_yaml(fp, contents):
     filepath = get_filepath_name(fp) + '.yaml'
     with open(filepath, 'w') as file_:
         yaml.dump(contents, file_)
+
+def write_to_json(fp, contents):
+    filepath = get_filepath_name(fp) + '.json'
+    with open(filepath, 'w') as json_file:
+        json.dump(contents, json_file)

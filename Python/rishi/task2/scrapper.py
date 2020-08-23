@@ -11,7 +11,7 @@ from bs4 import BeautifulSoup
 from utils import CsvCreator, get_filepath_name, flatten_brand_as_key, format_price
 from db import create_table, store_data
 from sqlitedb import store_in_sqlite
-from file_write import write_overall_result, write_to_csv, write_to_yaml
+from file_write import write_overall_result, write_to_csv, write_to_yaml, write_to_json
 
 inputfile = 'searchfile.csv'
 
@@ -40,7 +40,6 @@ def store_to_database(result):
             for data_ in contents[x]:
                 data = format_price(data_)
                 value = tuple(i for i in data.values())  # + (1,) static Foreign Keys Reference Value
-                print(value)
                 values.append(value)
     store_data('contents',values)
 
@@ -118,6 +117,7 @@ def scrapper():
     for brand, content in result.items():
         write_to_csv(brand, content)
         write_to_yaml(brand, content)
+        write_to_json(brand, content)
     
     store_to_database(result)
     return
