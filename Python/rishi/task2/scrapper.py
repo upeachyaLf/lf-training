@@ -28,7 +28,7 @@ def request_and_get_soup(search_url):
     return BeautifulSoup(response.text, 'lxml')
 
 def debug_html(html):
-    with open('daraz.html', mode='w') as debug_file:
+    with open('daraz.xml', mode='a') as debug_file:
         debug_file.write(str(html))
 
 def store_to_database(result):
@@ -43,6 +43,7 @@ def store_to_database(result):
     store_data('contents',values)
 
 def scrape_product(soup):
+    debug_html(soup)
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[0].string)
     row = {}
     try:
@@ -105,7 +106,6 @@ def scrapper():
             info.append(scrape_product(soup))
             # time.sleep(1)
         product_contents[product] = info
-
     write_overall_result(product_contents)
 
     result = {}
