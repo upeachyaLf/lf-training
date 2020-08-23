@@ -32,8 +32,8 @@ def save_as_csv (all_titles, all_authors):
 
 def generate_url_with_pagination(total_pages):
     url_array = []
-    for pageNumber in range(1, total_pages-1):
-        url_array.push(URL + '/page/' + str(pageNumber))
+    for pageNumber in range(2, total_pages+1):
+        url_array.append(URL + '/page/' + str(pageNumber))
     return url_array
 
 def scrap_and_save_records(url):
@@ -43,10 +43,15 @@ def scrap_and_save_records(url):
     all_authors = scrap_page_authors(soup)
     save_as_csv(all_titles, all_authors)
     time.sleep(3)
+    return soup
 
 def main():
-    scrap_and_save_records(URL)
-    
+    page_1_soup = scrap_and_save_records(URL)
+    total_pages = get_total_pages(page_1_soup)
+    print("total",total_pages)
+    url_with_pagination = generate_url_with_pagination(total_pages)
+    print("pages",url_with_pagination)
+
 
 
 if __name__ == "__main__":
