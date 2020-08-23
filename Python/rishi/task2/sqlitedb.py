@@ -25,6 +25,7 @@ INSERT_INTO_PRODUCTS_STATEMENT = """INSERT INTO products(brand_name,title,price,
 def get_connection():
     connection = sqlite3.connect(DB_FILE)
     yield connection
+    connection.commit()
     connection.close()
 
 def store_in_sqlite():
