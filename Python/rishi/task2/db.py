@@ -19,26 +19,23 @@ CREATE_BRANDS_TABLE = """
 	            REFERENCES search_terms(search_id)
                 ON DELETE CASCADE );"""
 
-CREATE_RESULTS_TABLE = """ CREATE TABLE results(result_id INT GENERATED ALWAYS AS IDENTITY, 
-                                                                search_id INT, 
+CREATE_RESULTS_TABLE = """ CREATE TABLE results(result_id INT GENERATED ALWAYS AS IDENTITY,
                                                                 brand_name VARCHAR(30), 
                                                                 title text,
                                                                 price float,
-                                                                aggregateRating float,
+                                                                aggregateRating VARCHAR(7),
                                                                 image_url text,
                                                                 description text,
                                                                 url_link text,
-                                                                PRIMARY KEY(result_id),
-                                                                CONSTRAINT fk_search_trem_result 
-                                                                    FOREIGN KEY(search_id)
-                                                                    REFERENCES search_terms(search_id));"""
+                                                                PRIMARY KEY(result_id)
+                                                                );"""
 
-INSERT_STATEMENT = """INSERT INTO results(search_id,title,price,url_link,image_url,description,aggregateRating,brand_name) VALUES (%s);"""
+INSERT_STATEMENT = """INSERT INTO results(title,price,url_link,image_url,description,aggregateRating,brand_name) VALUES (%s,%s,%s,%s,%s,%s,%s);"""
+INSERT_INTO_SEARCH_TABLE = """INSERT INTO search_terms(search_name) VALUES (%s);"""
 
-table_mapping = {
-    'search_term': 'search_terms',
-    'brands': 'brands',
-    'contents': 'results'
+table_insert_statement_mapping = {
+    'search_term': INSERT_INTO_SEARCH_TABLE,
+    'contents': INSERT_STATEMENT
 }
 
 def create_table():
@@ -68,10 +65,9 @@ def insert_into_table(statement, data):
         conn.rollback()
         raise
 
-def store_data(data):    
-    print(INSERT_STATEMENT)
-    print(data)
-    insert_into_table(INSERT_STATEMENT, data)
+def store_data(key, data):
+    INSERT_INTO_STATEMENT = table_insert_statement_mapping[key]
+    insert_into_table(INSERT_INTO_STATEMENT, data)
 
 @contextmanager
 def define_connection():

@@ -51,15 +51,26 @@ def get_filepath_name(path, name):
     filename = ''.join(s.strip() for s in name)
     return f"{path}/{filename}"
 
+def format_price(data):
+    if data.get('price'):
+        price = data['price']
+        result = float(price.split(':')[1].strip())
+        data['price'] = result
+    return data
+
 def store_to_database(result):
     values = []
+    search_terms = [(i,) for i in result.keys()]
+    print(search_terms)
+    store_data('search_term', search_terms)
     for key, contents in result.items():
         for x in contents.keys():
-            for data in contents[x]:
-                value = tuple(i for i in data.values()) + (1,) #static Foreign Keys Reference Value
+            for data_ in contents[x]:
+                data = format_price(data_)
+                value = tuple(i for i in data.values())  # + (1,) static Foreign Keys Reference Value
                 print(value)
                 values.append(value)
-    store_data(values)
+    store_data('contents',values)
 
 def write_to_csv(fp, contents):
     filepath = get_filepath_name(directory_path, fp)
@@ -76,14 +87,14 @@ def write_to_yaml(fp, contents):
 
 def scrape_product(soup):
     searched_result = json.loads(soup.find_all('script', type='application/ld+json')[0].string)
-    row = {}    
+    row = {}
     try:
         row["title"] = soup.find('span', class_="breadcrumb_item_anchor breadcrumb_item_anchor_last").text
         row["price"] = searched_result['offers']['priceCurrency'] + ': ' + str(max(searched_result['offers']['lowPrice'], searched_result['offers']['highPrice']))  
         row["url_link"] = searched_result['url']
         row["image_url"] = searched_result['image']
-        row["description"] = searched_result['description'] if hasattr(searched_result, 'description') else 'No Description'
-        row["aggregateRating"] = searched_result['aggregateRating'] if hasattr(searched_result, 'aggregateRating') else 'N/A'
+        row["description"] = 'No Description'
+        row["aggregateRating"] = searched_result['aggregateRating']['ratingValue'] if 'aggregateRating' in searched_result else 'N/A'
         row["brand"] = searched_result['brand']['name']
     except KeyError as err:
         print(f'KeyError:***\n{err}')
@@ -147,12 +158,10 @@ def scrapper():
             info.append(scrape_product(soup))
             time.sleep(3)
         product_contents[product] = info
-    debug_html(product_contents)
     result = {}
     for product, contents in product_contents.items():
         get_result = reduce(flatten_brand_as_key,contents, {})
         result[product] = get_result
-    debug_html(result)
 
     for brand, content in result.items():
         write_to_csv(brand, content)
