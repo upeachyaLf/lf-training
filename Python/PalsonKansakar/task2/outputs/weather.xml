@@ -1,0 +1,40 @@
+<item>
+  <field name="Period">Tonight</field>
+  <field name="Short_descriptions">Partly Cloudythen IsolatedT-storms</field>
+  <field name="temperatures">Low: 74 °F</field>
+</item>
+<item>
+  <field name="Period">Sunday</field>
+  <field name="Short_descriptions">Slight ChanceT-storms thenMostly Sunny</field>
+  <field name="temperatures">High: 88 °F</field>
+</item>
+<item>
+  <field name="Period">SundayNight</field>
+  <field name="Short_descriptions">Partly Cloudy</field>
+  <field name="temperatures">Low: 71 °F</field>
+</item>
+<item>
+  <field name="Period">Monday</field>
+  <field name="Short_descriptions">Mostly Sunny</field>
+  <field name="temperatures">High: 90 °F</field>
+</item>
+<item>
+  <field name="Period">MondayNight</field>
+  <field name="Short_descriptions">Mostly Clear</field>
+  <field name="temperatures">Low: 72 °F</field>
+</item>
+<item>
+  <field name="Period">Tuesday</field>
+  <field name="Short_descriptions">Sunny</field>
+  <field name="temperatures">High: 93 °F</field>
+</item>
+<item>
+  <field name="Period">TuesdayNight</field>
+  <field name="Short_descriptions">Mostly Clear</field>
+  <field name="temperatures">Low: 72 °F</field>
+</item>
+<item>
+  <field name="Period">Wednesday</field>
+  <field name="Short_descriptions">Sunny</field>
+  <field name="temperatures">High: 95 °F</field>
+</item>

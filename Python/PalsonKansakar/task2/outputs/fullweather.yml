@@ -1,0 +1,35 @@
+result:
+- Full_descriptions: Isolated showers and thunderstorms after midnight.  Partly cloudy,
+    with a low around 74. South southeast wind around 5 mph.  Chance of precipitation
+    is 20%.
+  Period: Tonight
+- Full_descriptions: 'A 20 percent chance of showers and thunderstorms before noon.  Mostly
+    sunny, with a high near 88. Southeast wind 5 to 10 mph. '
+  Period: Sunday
+- Full_descriptions: 'Partly cloudy, with a low around 71. South southwest wind 5
+    to 10 mph becoming light and variable  after midnight. '
+  Period: Sunday Night
+- Full_descriptions: 'Mostly sunny, with a high near 90. South southeast wind around
+    5 mph becoming southwest in the afternoon. '
+  Period: Monday
+- Full_descriptions: 'Mostly clear, with a low around 72. Southwest wind around 5
+    mph becoming calm  after midnight. '
+  Period: Monday Night
+- Full_descriptions: Sunny, with a high near 93.
+  Period: Tuesday
+- Full_descriptions: Mostly clear, with a low around 72.
+  Period: Tuesday Night
+- Full_descriptions: Sunny, with a high near 95.
+  Period: Wednesday
+- Full_descriptions: Mostly clear, with a low around 72.
+  Period: Wednesday Night
+- Full_descriptions: Sunny, with a high near 92.
+  Period: Thursday
+- Full_descriptions: Mostly clear, with a low around 71.
+  Period: Thursday Night
+- Full_descriptions: Mostly sunny, with a high near 89.
+  Period: Friday
+- Full_descriptions: Partly cloudy, with a low around 70.
+  Period: Friday Night
+- Full_descriptions: Mostly sunny, with a high near 88.
+  Period: Saturday
