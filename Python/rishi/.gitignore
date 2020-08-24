@@ -1,0 +1,10 @@
+__pycache__
+.vscode
+.pytest_cache
+*.html
+*.csv
+*.yaml
+.env
+*.db
+searchResults
+*.xml
